@@ -1,33 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Login</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<div class="container">
-  <h2>Login</h2>
-  <input id="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Password">
-  <button id="loginBtn">Login</button>
-  <p><a href="register.html">Create account</a></p>
-</div>
+  <div class="container">
+    <h2>Login</h2>
+    <input id="email" type="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
+    <button id="loginBtn">Login</button>
+    <p><a href="register.html">Create account</a></p>
+  </div>
 
-<script type="module">
-import { login } from "./js/auth.js";
-document.getElementById("loginBtn").onclick = async () => {
-  await login(email.value, password.value);
-  location.href = "dashboard.html";
-};
-</script>
+  <!-- GLOBAL SCRIPTS -->
+  <script src="js/theme.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/settings.js"></script>
 
-<script type="module" src="js/header.js"></script>
+  <!-- FIREBASE -->
+  <script src="js/firebase.js"></script>
+
+  <!-- LOGIN LOGIC -->
+  <script type="module">
+    import { login } from "./js/auth.js";
+
+    document.getElementById("loginBtn").onclick = async () => {
+      await login(
+        document.getElementById("email").value,
+        document.getElementById("password").value
+      );
+      location.href = "dashboard.html";
+    };
+  </script>
+
+  <!-- HEADER (ONCE ONLY) -->
+  <script type="module" src="js/header.js"></script>
+
 </body>
 </html>
-<script src="js/theme.js"></script>
-<script src="js/i18n.js"></script>
-<script src="js/settings.js"></script>
-<script src="js/firebase.js"></script>
-<script src="js/header.js"></script>
-<script type="module" src="js/auth.js"></script>
