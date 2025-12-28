@@ -6,10 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
-
 <body>
 
-  <!-- المحتوى -->
   <div class="container">
     <h2>Register</h2>
 
@@ -24,13 +22,29 @@
     </p>
   </div>
 
-  <!-- SCRIPTS (نفس الترتيب في كل الصفحات) -->
+  <!-- GLOBAL -->
   <script src="js/theme.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/settings.js"></script>
+
+  <!-- FIREBASE -->
   <script src="js/firebase.js"></script>
-  <script src="js/header.js"></script>
-  <script type="module" src="js/register.js"></script>
+
+  <!-- REGISTER LOGIC -->
+  <script type="module">
+    import { register } from "./js/auth.js";
+
+    document.getElementById("registerBtn").onclick = async () => {
+      await register(
+        document.getElementById("email").value,
+        document.getElementById("password").value
+      );
+      location.href = "dashboard.html";
+    };
+  </script>
+
+  <!-- HEADER (ONCE) -->
+  <script type="module" src="js/header.js"></script>
 
 </body>
 </html>
