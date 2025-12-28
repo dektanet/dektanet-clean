@@ -9,6 +9,10 @@ export function watchAuth(cb) {
   return onAuthStateChanged(auth, cb);
 }
 
-export function logoutUser() {
+export function login(email, password) {
+  return signInWithEmailAndPassword(auth, email, password);
+}
+
+export function logout() {
   return signOut(auth);
 }
