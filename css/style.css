@@ -1,4 +1,6 @@
-/* RESET */
+/* =========================
+   RESET
+========================= */
 * {
   margin: 0;
   padding: 0;
@@ -6,55 +8,90 @@
   font-family: Arial, sans-serif;
 }
 
-/* THEMES */
+/* =========================
+   THEMES (CSS VARIABLES)
+========================= */
+
+/* Dark (default) */
 :root[data-theme="dark"] {
   --bg: #0b0f1a;
   --text: #ffffff;
   --btn: #22c55e;
 }
 
+/* Light */
 :root[data-theme="light"] {
   --bg: #f5f5f5;
   --text: #111111;
   --btn: #2563eb;
 }
 
+/* Purple */
 :root[data-theme="purple"] {
   --bg: #2a003d;
   --text: #ffffff;
   --btn: #c084fc;
 }
 
-/* GLOBAL */
+/* =========================
+   GLOBAL
+========================= */
 body {
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
+  transition: all 0.3s ease;
 }
 
+/* =========================
+   LAYOUT
+========================= */
 .container {
-  max-width: 420px;
   width: 100%;
+  max-width: 420px;
   padding: 30px;
   text-align: center;
+  border-radius: 14px;
 }
 
+/* =========================
+   TEXT
+========================= */
+h1 {
+  margin-bottom: 10px;
+}
+
+p {
+  opacity: 0.85;
+  margin-bottom: 20px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
 .btn {
   display: inline-block;
   margin-top: 15px;
   padding: 12px 18px;
+
   background: var(--btn);
   color: #000;
+
   border-radius: 10px;
-  text-decoration: none;
   font-weight: bold;
+  text-decoration: none;
   border: none;
   cursor: pointer;
+
+  transition: all 0.3s ease;
 }
 
 .btn:hover {
   opacity: 0.9;
+  transform: scale(1.03);
 }
