@@ -1,20 +1,17 @@
-m<header class="app-header">
+<header class="app-header">
   <div class="logo">DEKTANET</div>
 
-  <nav id="navLinks"></nav>
+  <nav id="navLinks">
+    <!-- links يتركّبو بالـ JS -->
+  </nav>
 
   <div class="actions">
     <select id="langSelect">
       <option value="en">EN</option>
       <option value="ar">AR</option>
     </select>
-    <button onclick="toggleTheme()">🌓</button>
+
+    <button onclick="toggleTheme()">🌙</button>
     <button id="logoutBtn" style="display:none">Logout</button>
   </div>
 </header>
-<script src="js/theme.js"></script>
-<script src="js/i18n.js"></script>
-<script src="js/settings.js"></script>
-<script src="js/firebase.js"></script>
-<script src="js/header.js"></script>
-<script type="module" src="js/auth.js"></script>
