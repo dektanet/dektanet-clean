@@ -2,12 +2,12 @@
 
 const themes = ["dark", "light", "purple"];
 
-function applyTheme(theme) {
+export function applyTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
   localStorage.setItem("theme", theme);
 }
 
-function toggleTheme() {
+export function toggleTheme() {
   let current = localStorage.getItem("theme") || "dark";
   let index = themes.indexOf(current);
   let next = themes[(index + 1) % themes.length];
