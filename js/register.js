@@ -1,63 +1,82 @@
-import { auth } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 import {
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  signInWithPhoneNumber,
+  RecaptchaVerifier
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
 import {
-  doc,
-  setDoc,
-  serverTimestamp
+  doc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import { db } from "./firebase.js";
-
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
+const email = document.getElementById("email");
+const phone = document.getElementById("phone");
 const btn = document.getElementById("registerBtn");
 
-btn.addEventListener("click", async () => {
-  const email = emailInput.value.trim();
-  const password = passwordInput.value.trim();
+window.recaptchaVerifier = new RecaptchaVerifier(
+  auth,
+  "recaptcha-container",
+  { size: "invisible" }
+);
 
-  if (!email || !password) {
-    alert("Email & password required");
-    return;
-  }
-
+btn.onclick = async () => {
   try {
-    // 1️⃣ Create Auth user
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
-    const uid = cred.user.uid;
 
-    // 2️⃣ Create Firestore user document
-    await setDoc(doc(db, "users", uid), {
-      email,
+    // ✅ EMAIL REGISTER
+    if (email.value) {
+      const cred = await createUserWithEmailAndPassword(
+        auth,
+        email.value,
+        "12345678" // مثال، بعد تنجّم تطوّرها
+      );
 
-      balances: {
-        dekta: 0,
-        babydekta: 0
-      },
+      await createUserDoc(cred.user);
+      location.href = "dashboard.html";
+      return;
+    }
 
-      card: {
-        status: "NOT_ACTIVE",
-        activatedAt: null,
-        expiresAt: null
-      },
+    // ✅ PHONE REGISTER
+    if (phone.value) {
+      const confirmation = await signInWithPhoneNumber(
+        auth,
+        phone.value,
+        window.recaptchaVerifier
+      );
 
-      referral: {
-        by: null,
-        level1Count: 0,
-        level2Count: 0
-      },
+      const code = prompt("Enter SMS code");
+      const result = await confirmation.confirm(code);
 
-      role: "user",
-      createdAt: serverTimestamp()
-    });
+      await createUserDoc(result.user);
+      location.href = "dashboard.html";
+    }
 
-    // 3️⃣ Redirect
-    window.location.href = "dashboard.html";
-
-  } catch (err) {
-    alert(err.message);
+  } catch (e) {
+    alert(e.message);
   }
-});
+};
+
+async function createUserDoc(user) {
+  await setDoc(doc(db, "users", user.uid), {
+    email: user.email || null,
+    phone: user.phoneNumber || null,
+
+    balances: {
+      dekta: 0,
+      babydekta: 0
+    },
+
+    card: {
+      status: "NOT_ACTIVE",
+      activatedAt: null,
+      expiresAt: null
+    },
+
+    referral: {
+      by: null,
+      level1Count: 0,
+      level2Count: 0
+    },
+
+    role: "user",
+    createdAt: serverTimestamp()
+  });
+}
