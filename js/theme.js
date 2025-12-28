@@ -10,5 +10,3 @@ export function toggleTheme() {
   const next = current === "light" ? "dark" : "light";
   applyTheme(next);
 }
-
-applyTheme(localStorage.getItem("theme") || "light");
