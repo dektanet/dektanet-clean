@@ -1,51 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>DEKTANET</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- MAIN STYLE -->
-  <link rel="stylesheet" href="css/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
-  <!-- المحتوى متاع الصفحة -->
-  <div class="container center">
-    <h1 data-i18n="title">DEKTANET Clean Version</h1>
-    <p data-i18n="subtitle">Project initialized successfully</p>
+<div class="container">
+  <h1 data-i18n="title">DEKTANET Clean Version</h1>
+  <p data-i18n="subtitle">Project initialized successfully</p>
 
-    <div style="margin-top:30px">
-      <a href="login.html" class="btn" data-i18n="login">Login</a>
-    </div>
+  <a href="login.html" data-i18n="login">Login</a>
+  <br><br>
+  <button onclick="toggleTheme()" data-i18n="theme">Change Theme</button>
+</div>
 
-    <div style="margin-top:20px">
-      <button class="btn outline" onclick="toggleTheme()" data-i18n="theme">
-        Change Theme
-      </button>
-    </div>
-  </div>
-
-  <!-- ================== SCRIPTS (ORDER مهم برشا) ================== -->
-
-  <!-- THEME -->
-  <script src="js/theme.js"></script>
-
-  <!-- LANGUAGE -->
-  <script src="js/i18n.js"></script>
-
-  <!-- SETTINGS -->
-  <script src="js/settings.js"></script>
-
-  <!-- HEADER (لازم يكون قبل firebase/auth) -->
-  <script src="js/header.js"></script>
-
-  <!-- FIREBASE INIT -->
-  <script src="js/firebase.js"></script>
-
-  <!-- AUTH (MODULE) -->
-  <script type="module" src="js/auth.js"></script>
+<script src="js/theme.js"></script>
+<script type="module" src="js/i18n.js"></script>
+<script type="module" src="js/settings.js"></script>
+<script type="module" src="js/header.js"></script>
 
 </body>
 </html>
