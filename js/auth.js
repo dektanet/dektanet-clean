@@ -1,6 +1,6 @@
-// ================================
-// AUTH MODULE (REAL VERSION)
-// ================================
+// ======================================
+// AUTH MODULE – CLEAN & FINAL VERSION
+// ======================================
 
 import { auth } from "./firebase.js";
 
@@ -11,46 +11,51 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// ================================
-// LOAD CHECK
-// ================================
-console.log("✅ auth.js real loaded");
+// ======================================
+// LOAD CHECK (IMPORTANT)
+// ======================================
+console.log("✅ auth.js loaded");
 
-// حماية خفيفة (اختيارية)
 if (!auth) {
-  console.error("❌ Firebase auth not initialized");
+  throw new Error("❌ Firebase auth not initialized (check firebase.js)");
 }
 
-// ================================
+// ======================================
 // LOGIN
-// ================================
-export function login(email, password) {
+// ======================================
+export async function login(email, password) {
   if (!email || !password) {
-    return Promise.reject("Email and password required");
+    throw new Error("Email and password are required");
   }
+
   return signInWithEmailAndPassword(auth, email, password);
 }
 
-// ================================
+// ======================================
 // REGISTER
-// ================================
-export function register(email, password) {
+// ======================================
+export async function register(email, password) {
   if (!email || !password) {
-    return Promise.reject("Email and password required");
+    throw new Error("Email and password are required");
   }
+
   return createUserWithEmailAndPassword(auth, email, password);
 }
 
-// ================================
+// ======================================
 // LOGOUT
-// ================================
+// ======================================
 export function logout() {
   return signOut(auth);
 }
 
-// ================================
+// ======================================
 // AUTH STATE LISTENER
-// ================================
+// ======================================
 export function watchAuth(callback) {
+  if (typeof callback !== "function") {
+    throw new Error("watchAuth requires a callback function");
+  }
+
   return onAuthStateChanged(auth, callback);
 }
