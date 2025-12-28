@@ -24,24 +24,12 @@
   <script src="js/theme.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/settings.js"></script>
-
-  <!-- FIREBASE -->
   <script src="js/firebase.js"></script>
 
-  <!-- LOGIN LOGIC -->
-  <script type="module">
-    import { login } from "./js/auth.js";
+  <!-- LOGIN (منفصل) -->
+  <script type="module" src="js/login.js"></script>
 
-    document.getElementById("loginBtn").onclick = async () => {
-      await login(
-        document.getElementById("email").value,
-        document.getElementById("password").value
-      );
-      location.href = "dashboard.html";
-    };
-  </script>
-
-  <!-- HEADER (ONCE) -->
+  <!-- HEADER -->
   <script type="module" src="js/header.js"></script>
 
 </body>
