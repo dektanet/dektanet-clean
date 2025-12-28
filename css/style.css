@@ -1,25 +1,11 @@
-/* ================= ROOT / THEME ================= */
-
 :root {
   --bg: #ffffff;
-  --text: #000000;
-  --border: #dddddd;
-  --btn: #000000;
-  --btn-text: #ffffff;
+  --text: #111;
 }
 
-body.dark {
+[data-theme="dark"] {
   --bg: #0b0f1a;
-  --text: #ffffff;
-  --border: #1f2933;
-  --btn: #ffffff;
-  --btn-text: #000000;
-}
-
-/* ================= GLOBAL ================= */
-
-* {
-  box-sizing: border-box;
+  --text: #fff;
 }
 
 body {
@@ -27,68 +13,50 @@ body {
   font-family: Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
-  padding-top: 70px; /* ارتفاع الـ header */
+  padding-top: 70px;
 }
 
-/* ================= HEADER ================= */
-
+/* HEADER */
 .app-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-
   height: 60px;
   padding: 0 20px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   background: var(--bg);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid #ccc;
   z-index: 1000;
 }
 
-.app-header .logo {
-  font-weight: bold;
-  font-size: 18px;
-}
-
 .app-header nav a {
-  margin: 0 8px;
+  margin: 0 10px;
   text-decoration: none;
-  color: var(--text);
   font-weight: bold;
+  color: var(--text);
 }
 
-.app-header nav a:hover {
-  text-decoration: underline;
-}
-
-.app-header .actions {
+.actions {
   display: flex;
-  align-items: center;
   gap: 10px;
 }
 
-.app-header select {
-  padding: 4px;
-}
-
-.app-header button {
-  padding: 6px 10px;
-  border: none;
-  cursor: pointer;
-  background: var(--btn);
-  color: var(--btn-text);
-  border-radius: 4px;
-}
-
-/* ================= CONTAINER ================= */
-
+/* PAGE */
 .container {
-  max-width: 600px;
-  margin: auto;
   text-align: center;
+  margin-top: 40px;
+}
+
+input {
+  display: block;
+  margin: 10px auto;
+  padding: 8px;
+}
+
+button {
+  padding: 6px 12px;
+  cursor: pointer;
 }
