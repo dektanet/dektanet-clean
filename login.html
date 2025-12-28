@@ -8,15 +8,28 @@
 </head>
 <body>
 
-  <div class="container">
-    <h2>Login</h2>
+<div class="container">
+  <h2>Login</h2>
+  <input id="email" type="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+  <button id="loginBtn">Login</button>
+</div>
 
-    <input type="email" placeholder="Email">
-    <input type="password" placeholder="Password">
+<script type="module">
+  import { login } from "./js/auth.js";
 
-    <button>Login</button>
-  </div>
+  document.getElementById("loginBtn").onclick = async () => {
+    const email = email.value;
+    const pass = password.value;
+    try {
+      await login(email, pass);
+      location.href = "index.html";
+    } catch (e) {
+      alert(e.message);
+    }
+  };
+</script>
 
-  <script src="js/auth.js"></script>
+<script type="module" src="js/header.js"></script>
 </body>
 </html>
