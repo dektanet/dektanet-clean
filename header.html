@@ -1,17 +1,38 @@
-<header class="app-header">
-  <div class="logo">DEKTANET</div>
+// js/header.js
 
-  <nav id="navLinks">
-    <!-- links يتركّبو بالـ JS -->
-  </nav>
+import { auth } from "./firebase.js";
+import { logout } from "./auth.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-  <div class="actions">
-    <select id="langSelect">
-      <option value="en">EN</option>
-      <option value="ar">AR</option>
-    </select>
+async function loadHeader() {
+  const res = await fetch("/dektanet-clean/header.html");
+  const html = await res.text();
+  document.body.insertAdjacentHTML("afterbegin", html);
 
-    <button onclick="toggleTheme()">🌙</button>
-    <button id="logoutBtn" style="display:none">Logout</button>
-  </div>
-</header>
+  const nav = document.getElementById("navLinks");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      nav.innerHTML = `
+        <a href="index.html">Home</a>
+        <a href="dashboard.html">Dashboard</a>
+      `;
+      logoutBtn.style.display = "inline-block";
+    } else {
+      nav.innerHTML = `
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+      `;
+      logoutBtn.style.display = "none";
+    }
+  });
+
+  logoutBtn.onclick = async () => {
+    await logout();
+    location.href = "login.html";
+  };
+}
+
+document.addEventListener("DOMContentLoaded", loadHeader);
