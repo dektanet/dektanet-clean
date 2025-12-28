@@ -3,7 +3,8 @@ import { logout } from "./auth.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 async function loadHeader() {
-  const res = await fetch("header.html");
+  // ✅ FIX GitHub Pages path
+  const res = await fetch("/dektanet-clean/header.html");
   const html = await res.text();
   document.body.insertAdjacentHTML("afterbegin", html);
 
