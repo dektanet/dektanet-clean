@@ -95,3 +95,34 @@ p {
   opacity: 0.9;
   transform: scale(1.03);
 }
+/* ================= HEADER ================= */
+.header {
+  width: 100%;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg);
+  border-bottom: 1px solid #222;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.header-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn.small {
+  padding: 6px 10px;
+  font-size: 14px;
+}
+
+.lang-select {
+  padding: 5px;
+  border-radius: 6px;
+}
