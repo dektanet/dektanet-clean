@@ -1,31 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <title>DEKTANET</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- MAIN STYLE -->
   <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
 
-  <div class="container">
+  <div class="container center">
+
     <h1 data-i18n="title">DEKTANET Clean Version</h1>
     <p data-i18n="subtitle">Project initialized successfully</p>
 
-    <a href="login.html" class="btn" data-i18n="login">Login</a>
-    <br><br>
-    <button class="btn" onclick="toggleTheme()" data-i18n="theme">
-      Change Theme
-    </button>
+    <div style="margin-top:30px">
+      <a href="login.html" class="btn" data-i18n="login">
+        Login
+      </a>
+    </div>
+
+    <div style="margin-top:20px">
+      <button class="btn outline" onclick="toggleTheme()" data-i18n="theme">
+        Change Theme
+      </button>
+    </div>
+
   </div>
 
-  <!-- ORDER IS IMPORTANT -->
+  <!-- ================= SCRIPTS (ORDER IMPORTANT) ================= -->
+
+  <!-- UI / THEME -->
   <script src="js/theme.js"></script>
+
+  <!-- LANGUAGE / RTL -->
   <script src="js/i18n.js"></script>
+
+  <!-- SETTINGS (theme + language) -->
   <script src="js/settings.js"></script>
+
+  <!-- FIREBASE INIT -->
   <script src="js/firebase.js"></script>
-  <script src="js/auth.js"></script>
+
+  <!-- AUTH (MODULE) -->
+  <script type="module" src="js/auth.js"></script>
 
 </body>
 </html>
