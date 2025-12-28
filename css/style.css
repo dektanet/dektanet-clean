@@ -1,62 +1,8 @@
-:root {
-  --bg: #ffffff;
-  --text: #111;
-}
-
-[data-theme="dark"] {
-  --bg: #0b0f1a;
-  --text: #fff;
-}
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  padding-top: 70px;
-}
-
-/* HEADER */
+body { font-family: Arial; background:#f5f5f5; padding-top:70px }
 .app-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--bg);
-  border-bottom: 1px solid #ccc;
-  z-index: 1000;
+  position:fixed; top:0; left:0; right:0;
+  display:flex; justify-content:space-between;
+  padding:10px 20px; background:#fff; border-bottom:1px solid #ddd;
 }
-
-.app-header nav a {
-  margin: 0 10px;
-  text-decoration: none;
-  font-weight: bold;
-  color: var(--text);
-}
-
-.actions {
-  display: flex;
-  gap: 10px;
-}
-
-/* PAGE */
-.container {
-  text-align: center;
-  margin-top: 40px;
-}
-
-input {
-  display: block;
-  margin: 10px auto;
-  padding: 8px;
-}
-
-button {
-  padding: 6px 12px;
-  cursor: pointer;
-}
+.container { max-width:400px; margin:40px auto; text-align:center }
+input, button { display:block; width:100%; margin:10px 0; padding:10px }
