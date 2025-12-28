@@ -1,19 +1,17 @@
-<header class="header">
-  <div class="header-left">
-    <span class="logo">DEKTANET</span>
-  </div>
+<header class="app-header">
+  <div class="logo">DEKTANET</div>
 
-  <div class="header-right">
-    <button class="btn small" onclick="toggleTheme()">🌙</button>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="login.html">Login</a>
+  </nav>
 
-    <select id="langSelect" class="lang-select">
+  <div class="actions">
+    <select id="langSelect">
       <option value="en">EN</option>
-      <option value="fr">FR</option>
       <option value="ar">AR</option>
     </select>
 
-    <button class="btn small logout-btn" id="logoutBtn" style="display:none">
-      Logout
-    </button>
+    <button onclick="toggleTheme()">🌙</button>
   </div>
 </header>
