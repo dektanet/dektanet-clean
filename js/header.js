@@ -1,18 +1,30 @@
-// ================= HEADER LOADER =================
+// ===============================
+// HEADER LOADER (CLEAN + SAFE)
+// ===============================
 
 async function loadHeader() {
-  const res = await fetch("header.html");
-  const html = await res.text();
+  try {
+    // header.html موجود في root
+    const res = await fetch("/header.html");
+    if (!res.ok) throw new Error("Header not found");
 
-  document.body.insertAdjacentHTML("afterbegin", html);
+    const html = await res.text();
 
-  // language select
-  const select = document.getElementById("langSelect");
-  if (select) {
-    select.value = localStorage.getItem("lang") || detectLanguage();
-    select.addEventListener("change", e => {
-      setLanguage(e.target.value);
-    });
+    document.body.insertAdjacentHTML("afterbegin", html);
+
+    // Language select (SAFE)
+    const select = document.getElementById("langSelect");
+    if (select && typeof setLanguage === "function") {
+      const savedLang = localStorage.getItem("lang") || "en";
+      select.value = savedLang;
+
+      select.addEventListener("change", e => {
+        setLanguage(e.target.value);
+      });
+    }
+
+  } catch (err) {
+    console.error("❌ Header load failed:", err);
   }
 }
 
