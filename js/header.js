@@ -1,44 +1,58 @@
-// ===============================
-// HEADER LOADER (FINAL VERSION)
-// ===============================
+// ================= HEADER LOADER (SMART) =================
+
+import { auth } from "./firebase.js";
+import { onAuthStateChanged, signOut } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 async function loadHeader() {
   try {
-    const res = await fetch("header.html");
-    if (!res.ok) throw new Error("header.html not found");
+    const res = await fetch("/header.html");
+    if (!res.ok) throw new Error("Header not found");
 
     const html = await res.text();
     document.body.insertAdjacentHTML("afterbegin", html);
 
-    // LANGUAGE
-    const select = document.getElementById("langSelect");
-    if (select && typeof setLanguage === "function") {
-      const savedLang = localStorage.getItem("lang") || "en";
-      select.value = savedLang;
-      select.addEventListener("change", e => {
-        setLanguage(e.target.value);
-      });
-    }
-
-    // AUTH UI (SAFE)
-    if (typeof watchAuth === "function") {
-      watchAuth(user => {
-        const login = document.getElementById("loginLink");
-        const logout = document.getElementById("logoutLink");
-
-        if (user) {
-          login.style.display = "none";
-          logout.style.display = "inline";
-          logout.onclick = () => logoutUser();
-        } else {
-          login.style.display = "inline";
-          logout.style.display = "none";
-        }
-      });
-    }
+    setupHeaderLogic();
 
   } catch (err) {
     console.error("❌ Header load failed:", err);
+  }
+}
+
+function setupHeaderLogic() {
+  const nav = document.getElementById("navLinks");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  // auth state
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      // LOGGED IN
+      nav.innerHTML = `
+        <a href="index.html">Home</a>
+        <a href="dashboard.html">Dashboard</a>
+      `;
+      logoutBtn.style.display = "inline-block";
+    } else {
+      // LOGGED OUT
+      nav.innerHTML = `
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+      `;
+      logoutBtn.style.display = "none";
+    }
+  });
+
+  // logout
+  logoutBtn.onclick = async () => {
+    await signOut(auth);
+    window.location.href = "login.html";
+  };
+
+  // language
+  const select = document.getElementById("langSelect");
+  if (select && typeof setLanguage === "function") {
+    select.value = localStorage.getItem("lang") || "en";
+    select.onchange = e => setLanguage(e.target.value);
   }
 }
 
