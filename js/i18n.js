@@ -16,14 +16,14 @@ const translations = {
     theme: "Changer le thème"
   },
   ar: {
-    title: "نسخة DEKTANET النظيفة",
+    title: "النسخة النظيفة DEKTANET",
     subtitle: "تم تهيئة المشروع بنجاح",
     login: "تسجيل الدخول",
     theme: "تغيير المظهر"
   }
 };
 
-function setLanguage(lang) {
+export function setLanguage(lang) {
   currentLang = lang;
   localStorage.setItem("lang", lang);
 
@@ -35,8 +35,10 @@ function setLanguage(lang) {
   });
 }
 
-function detectLanguage() {
-  return localStorage.getItem("lang") ||
-         navigator.language.slice(0, 2) ||
-         "en";
+export function detectLanguage() {
+  return (
+    localStorage.getItem("lang") ||
+    navigator.language.slice(0, 2) ||
+    "en"
+  );
 }
