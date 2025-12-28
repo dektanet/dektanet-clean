@@ -1,6 +1,4 @@
-// Theme system (GLOBAL)
-
-const themes = ["dark", "light", "purple"];
+const themes = ["light", "dark"];
 
 export function applyTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
@@ -8,11 +6,9 @@ export function applyTheme(theme) {
 }
 
 export function toggleTheme() {
-  let current = localStorage.getItem("theme") || "dark";
-  let index = themes.indexOf(current);
-  let next = themes[(index + 1) % themes.length];
+  const current = localStorage.getItem("theme") || "light";
+  const next = current === "light" ? "dark" : "light";
   applyTheme(next);
 }
 
-// Apply theme on load
-applyTheme(localStorage.getItem("theme") || "dark");
+applyTheme(localStorage.getItem("theme") || "light");
