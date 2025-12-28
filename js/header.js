@@ -3,7 +3,6 @@ import { logout } from "./auth.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 async function loadHeader() {
-  // ✅ FIX GitHub Pages path
   const res = await fetch("/dektanet-clean/header.html");
   const html = await res.text();
   document.body.insertAdjacentHTML("afterbegin", html);
@@ -13,14 +12,12 @@ async function loadHeader() {
 
   onAuthStateChanged(auth, user => {
     if (user) {
-      // ✅ LOGGED IN
       nav.innerHTML = `
         <a href="index.html">Home</a>
         <a href="dashboard.html">Dashboard</a>
       `;
       logoutBtn.style.display = "inline-block";
     } else {
-      // ✅ LOGGED OUT
       nav.innerHTML = `
         <a href="index.html">Home</a>
         <a href="login.html">Login</a>
@@ -32,7 +29,7 @@ async function loadHeader() {
 
   logoutBtn.onclick = async () => {
     await logout();
-    location.href = "login.html";
+    window.location.href = "login.html";
   };
 }
 
