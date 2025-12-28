@@ -18,6 +18,13 @@ async function loadHeader() {
       `;
       logoutBtn.style.display = "inline-block";
     } else {
+      // LOGGED OUT
+nav.innerHTML = `
+  <a href="index.html">Home</a>
+  <a href="login.html">Login</a>
+  <a href="register.html">Register</a>
+`;
+logoutBtn.style.display = "none";
       nav.innerHTML = `
         <a href="index.html">Home</a>
         <a href="login.html">Login</a>
