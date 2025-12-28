@@ -1,23 +1,50 @@
 // ===============================
-// HEADER LOADER (CLEAN + SAFE)
+// HEADER LOADER + AUTH BINDING
 // ===============================
+
+import { watchAuth, logout } from "./auth.js";
 
 async function loadHeader() {
   try {
-    // header.html موجود في root
+    // header.html في root
     const res = await fetch("/header.html");
     if (!res.ok) throw new Error("Header not found");
 
     const html = await res.text();
-
     document.body.insertAdjacentHTML("afterbegin", html);
 
-    // Language select (SAFE)
+    // عناصر
+    const loginLink = document.getElementById("loginLink");
+    const dashboardLink = document.getElementById("dashboardLink");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    // AUTH STATE
+    watchAuth(user => {
+      if (user) {
+        // مسجّل
+        loginLink.style.display = "none";
+        dashboardLink.style.display = "inline";
+        logoutBtn.style.display = "inline";
+      } else {
+        // موش مسجّل
+        loginLink.style.display = "inline";
+        dashboardLink.style.display = "none";
+        logoutBtn.style.display = "none";
+      }
+    });
+
+    // LOGOUT
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", e => {
+        e.preventDefault();
+        logout();
+      });
+    }
+
+    // LANGUAGE (SAFE)
     const select = document.getElementById("langSelect");
     if (select && typeof setLanguage === "function") {
-      const savedLang = localStorage.getItem("lang") || "en";
-      select.value = savedLang;
-
+      select.value = localStorage.getItem("lang") || "en";
       select.addEventListener("change", e => {
         setLanguage(e.target.value);
       });
