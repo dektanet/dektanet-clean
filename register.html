@@ -1,49 +1,27 @@
+<!-- ================= register.html ================= -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Register | DEKTANET</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
   <div class="container">
     <h2>Register</h2>
-
     <input id="email" type="email" placeholder="Email" />
     <input id="password" type="password" placeholder="Password" />
-
     <button id="registerBtn">Create Account</button>
-
-    <p>
-      Already have an account ?
-      <a href="login.html">Login</a>
-    </p>
+    <p><a href="login.html">Login</a></p>
   </div>
 
-  <!-- GLOBAL -->
   <script src="js/theme.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/settings.js"></script>
-
-  <!-- FIREBASE -->
   <script src="js/firebase.js"></script>
 
-  <!-- REGISTER LOGIC -->
-  <script type="module">
-    import { register } from "./js/auth.js";
-
-    document.getElementById("registerBtn").onclick = async () => {
-      await register(
-        document.getElementById("email").value,
-        document.getElementById("password").value
-      );
-      location.href = "dashboard.html";
-    };
-  </script>
-
-  <!-- HEADER (ONCE) -->
+  <script type="module" src="js/register.js"></script>
   <script type="module" src="js/header.js"></script>
 
 </body>
