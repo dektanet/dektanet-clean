@@ -12,22 +12,18 @@ async function loadHeader() {
 
   onAuthStateChanged(auth, user => {
     if (user) {
+      // ✅ LOGGED IN
       nav.innerHTML = `
         <a href="index.html">Home</a>
         <a href="dashboard.html">Dashboard</a>
       `;
       logoutBtn.style.display = "inline-block";
     } else {
-      // LOGGED OUT
-nav.innerHTML = `
-  <a href="index.html">Home</a>
-  <a href="login.html">Login</a>
-  <a href="register.html">Register</a>
-`;
-logoutBtn.style.display = "none";
+      // ✅ LOGGED OUT
       nav.innerHTML = `
         <a href="index.html">Home</a>
         <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
       `;
       logoutBtn.style.display = "none";
     }
