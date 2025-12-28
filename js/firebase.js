@@ -1,5 +1,13 @@
-// Firebase initialization (placeholder)
+// js/firebase.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-console.log("🔥 Firebase loaded successfully");
+const firebaseConfig = {
+  apiKey: "XXXX",
+  authDomain: "XXXX.firebaseapp.com",
+  projectId: "XXXX",
+  appId: "XXXX"
+};
 
-// هنا لاحقاً تحط config متع Firebase
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
