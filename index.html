@@ -1,27 +1,23 @@
+<!-- ================= index.html ================= -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>DEKTANET</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-  <!-- HEADER يترك فارغ، يتعبّى آليًا من header.js -->
-
   <div class="container">
     <h1 data-i18n="title">DEKTANET Clean Version</h1>
-    <a href="login.html">Login</a>
+    <a href="login.html" data-i18n="login">Login</a>
   </div>
 
-  <!-- SCRIPTS (مرة وحدة وبالترتيب الصحيح) -->
   <script src="js/theme.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/settings.js"></script>
+  <script src="js/firebase.js"></script>
 
-  <!-- لازم module -->
-  <script type="module" src="js/firebase.js"></script>
   <script type="module" src="js/header.js"></script>
   <script type="module" src="js/auth.js"></script>
 
