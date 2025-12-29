@@ -1,49 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Register | DEKTANET</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <title>Register</title>
 </head>
-
 <body>
 
-<div class="container">
-  <h2>Register</h2>
+<h2>Register</h2>
 
-  <input id="email" type="email" placeholder="Email" />
-  <input id="phone" type="text" placeholder="+216xxxxxxxx" />
-  <input id="password" type="password" placeholder="Password" />
+<input id="email" type="email" placeholder="Email"><br><br>
+<input id="phone" type="text" placeholder="Phone"><br><br>
+<input id="password" type="password" placeholder="Password"><br><br>
 
-  <button id="registerBtn">Create Account</button>
-
-  <p>
-    Already have an account?
-    <a href="login.html">Login</a>
-  </p>
-</div>
+<button id="registerBtn">Create Account</button>
+<p><a href="login.html">Login</a></p>
 
 <script type="module">
   import { register } from "./js/register.js";
 
-  document.getElementById("registerBtn").addEventListener("click", async () => {
-    const email = document.getElementById("email").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const password = document.getElementById("password").value;
-
-    if (!email || !password) {
-      alert("عمّر الإيميل والباسورد");
-      return;
-    }
-
+  registerBtn.onclick = async () => {
     try {
-      await register(email, password, phone);
-      alert("تم إنشاء الحساب بنجاح ✅");
+      await register(email.value, password.value, phone.value);
+      alert("تم إنشاء الحساب");
       window.location.href = "login.html";
-    } catch (err) {
-      alert(err.message);
+    } catch (e) {
+      alert(e.message);
     }
-  });
+  };
 </script>
 
 </body>
