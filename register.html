@@ -1,50 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Register | DEKTANET</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/style.css" />
-</head>
+import { auth, db } from "./firebase.js";
+import {
+  createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-<body>
+export async function register(email, password, phone) {
+  const userCredential =
+    await createUserWithEmailAndPassword(auth, email, password);
 
-  <div class="container">
-    <h2>Register</h2>
+  const user = userCredential.user;
 
-    <!-- Email (اختياري) -->
-    <input id="email" type="email" placeholder="Email (optional)" />
+  await setDoc(doc(db, "users", user.uid), {
+    email: email,
+    phone: phone || "",
+    balance: 0,
+    createdAt: Date.now()
+  });
 
-    <!-- Phone (عالمي مع رمز الدولة) -->
-    <input id="phone" type="tel" placeholder="+216xxxxxxxx" />
-
-    <!-- Password (للإيميل فقط) -->
-    <input id="password" type="password" placeholder="Password (email only)" />
-
-    <!-- Firebase reCAPTCHA -->
-    <div id="recaptcha-container"></div>
-
-    <button id="registerBtn">Create Account</button>
-
-    <p>
-      Already have an account?
-      <a href="login.html">Login</a>
-    </p>
-  </div>
-
-  <!-- GLOBAL -->
-  <script src="js/theme.js"></script>
-  <script src="js/i18n.js"></script>
-  <script src="js/settings.js"></script>
-
-  <!-- FIREBASE -->
-  <script src="js/firebase.js"></script>
-
-  <!-- REGISTER LOGIC -->
-  <script type="module" src="js/register.js"></script>
-
-  <!-- HEADER -->
-  <script type="module" src="js/header.js"></script>
-
-</body>
-</html>
+  return user;
+}
