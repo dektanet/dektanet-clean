@@ -7,20 +7,26 @@
 <body>
 
 <h2>Register</h2>
-
-<input id="email" type="email" placeholder="Email"><br><br>
-<input id="phone" type="text" placeholder="Phone"><br><br>
-<input id="password" type="password" placeholder="Password"><br><br>
-
+<input id="email" type="email" placeholder="Email">
+<input id="phone" type="text" placeholder="Phone">
+<input id="password" type="password" placeholder="Password">
 <button id="registerBtn">Create Account</button>
-<p><a href="login.html">Login</a></p>
 
 <script type="module">
   import { register } from "./js/register.js";
 
-  registerBtn.onclick = async () => {
+  document.getElementById("registerBtn").onclick = async () => {
+    const email = email.value;
+    const phone = phone.value;
+    const password = password.value;
+
+    if (!email || !password) {
+      alert("عمّر البيانات");
+      return;
+    }
+
     try {
-      await register(email.value, password.value, phone.value);
+      await register(email, password, phone);
       alert("تم إنشاء الحساب");
       window.location.href = "login.html";
     } catch (e) {
