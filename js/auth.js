@@ -1,14 +1,21 @@
-// js/auth.js
 import { auth } from "./firebase.js";
 import {
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 export async function login(email, password) {
-  await signInWithEmailAndPassword(auth, email, password);
+  const userCredential =
+    await signInWithEmailAndPassword(auth, email, password);
+
+  return userCredential.user;
 }
 
-export async function register(email, password) {
-  await createUserWithEmailAndPassword(auth, email, password);
+export function logout() {
+  return signOut(auth);
+}
+
+export function onUserChanged(callback) {
+  onAuthStateChanged(auth, callback);
 }
