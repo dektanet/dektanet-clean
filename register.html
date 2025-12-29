@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Register</title>
@@ -14,14 +14,17 @@
 
 <button id="registerBtn">Create Account</button>
 
+<p>
+  Already have an account?
+  <a href="login.html">Login</a>
+</p>
+
 <script type="module">
   import { register } from "./js/register.js";
 
   const btn = document.getElementById("registerBtn");
 
   btn.addEventListener("click", async () => {
-    console.log("CLICK OK ✅");
-
     const email = document.getElementById("email").value;
     const phone = document.getElementById("phone").value;
     const password = document.getElementById("password").value;
@@ -34,10 +37,9 @@
     try {
       await register(email, password, phone);
       alert("تم إنشاء الحساب بنجاح");
-      window.location.href = "./login.html";
+      window.location.href = "login.html";
     } catch (e) {
-      alert("ERROR: " + e.message);
-      console.error(e);
+      alert("Register error: " + e.message);
     }
   });
 </script>
