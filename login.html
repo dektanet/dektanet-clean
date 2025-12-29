@@ -1,42 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Login</title>
-</head>
-<body>
+import { login } from "./js/auth.js";
+import { auth } from "./js/firebase.js";
+import {
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-<h2>Login</h2>
+// 🔥 نفرغ أي session قديمة
+await signOut(auth);
 
-<input id="email" type="email" placeholder="Email"><br><br>
-<input id="password" type="password" placeholder="Password"><br><br>
+document.getElementById("loginBtn").addEventListener("click", async () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-<button id="loginBtn">Login</button>
+  if (!email || !password) {
+    alert("عمّر الإيميل والباسورد");
+    return;
+  }
 
-<p>
-  <a href="register.html">Create account</a>
-</p>
-
-<script type="module">
-  import { login } from "./js/auth.js";
-
-  document.getElementById("loginBtn").addEventListener("click", async () => {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    if (!email || !password) {
-      alert("عمّر الإيميل والباسورد");
-      return;
-    }
-
-    try {
-      await login(email, password);
-      window.location.href = "dashboard.html";
-    } catch (e) {
-      alert("❌ Login فشل: " + e.message);
-    }
-  });
-</script>
-
-</body>
-</html>
+  try {
+    await login(email, password);
+    window.location.href = "dashboard.html";
+  } catch (e) {
+    alert("Login error: " + e.message);
+  }
+});
