@@ -1,13 +1,25 @@
-import { auth } from "./firebase.js";
+// js/auth.js
 import {
   signInWithEmailAndPassword,
-  signOut
+  signOut,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-export function login(email, password) {
-  return signInWithEmailAndPassword(auth, email, password);
+import { auth } from "./firebase.js";
+
+// LOGIN
+export async function login(email, password) {
+  await signInWithEmailAndPassword(auth, email, password);
 }
 
-export function logout() {
-  return signOut(auth);
+// LOGOUT
+export async function logout() {
+  await signOut(auth);
+}
+
+// AUTH GUARD (حماية)
+export function checkAuth(callback) {
+  onAuthStateChanged(auth, (user) => {
+    callback(user);
+  });
 }
