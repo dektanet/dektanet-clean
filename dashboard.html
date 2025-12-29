@@ -6,19 +6,19 @@
 </head>
 <body>
 
-<h1>Dashboard</h1>
+<h2>Dashboard</h2>
+<p>DEKTA: 0</p>
+<p>DEKTA-BOX: 30</p>
 
 <button id="logoutBtn">Logout</button>
 
 <script type="module">
-  import { logout, requireAuth } from "./js/auth.js";
-
-  requireAuth((user) => {
-    console.log("User:", user.email);
-  });
+  import { logout } from "./js/auth.js";
 
   document.getElementById("logoutBtn").onclick = async () => {
     await logout();
+    localStorage.clear();
+    sessionStorage.clear();
     window.location.href = "login.html";
   };
 </script>
