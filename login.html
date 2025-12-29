@@ -1,37 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
 </head>
 <body>
 
-  <h2>Login</h2>
+<h2>Login</h2>
 
-  <input id="email" type="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Password">
-  <button id="loginBtn">Login</button>
+<input id="email" type="email" placeholder="Email"><br><br>
+<input id="password" type="password" placeholder="Password"><br><br>
 
-  <script type="module">
-    import { login } from "./js/auth.js";
+<button id="loginBtn">Login</button>
 
-    document.getElementById("loginBtn").addEventListener("click", async () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+<script type="module">
+  import { login } from "./js/auth.js";
 
-      if (!email || !password) {
-        alert("عمّر الإيميل والباسورد");
-        return;
-      }
+  document.getElementById("loginBtn").onclick = async () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-      try {
-        await login(email, password);
-        window.location.href = "dashboard.html";
-      } catch (e) {
-        alert("Login error: " + e.message);
-      }
-    });
-  </script>
+    console.log("CLICK");
+    console.log(email, password);
+
+    if (!email || !password) {
+      alert("عمّر الإيميل والباسورد");
+      return;
+    }
+
+    try {
+      await login(email, password);
+      alert("Login OK");
+      window.location.href = "dashboard.html";
+    } catch (e) {
+      alert("ERROR: " + e.message);
+      console.error(e);
+    }
+  };
+</script>
 
 </body>
 </html>
