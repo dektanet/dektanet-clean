@@ -5,10 +5,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 export async function login(email, password) {
-  const res = await signInWithEmailAndPassword(auth, email, password);
-  return res.user;
+  return await signInWithEmailAndPassword(auth, email, password);
 }
 
 export async function logout() {
-  await signOut(auth);
+  return await signOut(auth);
 }
