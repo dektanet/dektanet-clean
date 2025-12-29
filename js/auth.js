@@ -1,41 +1,14 @@
-import { auth, db } from "./firebase.js";
+// js/auth.js
+import { auth } from "./firebase.js";
 import {
-  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {
-  doc,
-  setDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-/* REGISTER */
+export async function login(email, password) {
+  await signInWithEmailAndPassword(auth, email, password);
+}
+
 export async function register(email, password) {
-  const cred = await createUserWithEmailAndPassword(auth, email, password);
-
-  await setDoc(doc(db, "users", cred.user.uid), {
-    uid: cred.user.uid,
-    email: email,
-    role: "user",
-    createdAt: serverTimestamp()
-  });
-
-  return cred;
-}
-
-/* LOGIN */
-export function login(email, password) {
-  return signInWithEmailAndPassword(auth, email, password);
-}
-
-/* LOGOUT */
-export function logout() {
-  return signOut(auth);
-}
-
-/* AUTH WATCHER */
-export function watchAuth(cb) {
-  return onAuthStateChanged(auth, cb);
+  await createUserWithEmailAndPassword(auth, email, password);
 }
