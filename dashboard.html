@@ -1,20 +1,45 @@
-<div class="container">
-  <h2>Dashboard</h2>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+</head>
+<body>
 
-  <pre id="userInfo">Loading...</pre>
+<h2>Dashboard</h2>
 
-  <hr>
+<p>DEKTA: <span id="dekta">0</span></p>
+<p>DEKTA-BOX: <span id="box">0</span></p>
+<p>Status: <span id="status"></span></p>
 
-  <h3>Balances</h3>
-  <p>DEKTA: <b id="dektaBalance">0</b></p>
-  <p>DEKTA-BOX: <b id="boxBalance">30</b></p>
+<button id="logoutBtn">Logout</button>
 
-  <hr>
+<script type="module">
+  import { auth, db } from "./js/firebase.js";
+  import { onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { doc, getDoc }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  <h3>DEKTA-BOX-WIN</h3>
-  <p>Status: <b id="boxStatus">INACTIVE</b></p>
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = "login.html";
+      return;
+    }
 
-  <button id="activateBoxBtn">
-    🔑 Activate BOX – 30 DEKTA
-  </button>
-</div>
+    const snap = await getDoc(doc(db, "users", user.uid));
+    if (snap.exists()) {
+      dekta.textContent = snap.data().dekta;
+      box.textContent = snap.data().dektaBox;
+      status.textContent = snap.data().boxStatus;
+    }
+  });
+
+  logoutBtn.onclick = async () => {
+    await signOut(auth);
+    window.location.href = "login.html";
+  };
+</script>
+
+</body>
+</html>
