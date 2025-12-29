@@ -1,25 +1,42 @@
-import { login } from "./js/auth.js";
-import { auth } from "./js/firebase.js";
-import {
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+</head>
+<body>
 
-// 🔥 نفرغ أي session قديمة
-await signOut(auth);
+<h2>Login</h2>
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+<button id="loginBtn">Login</button>
 
-document.getElementById("loginBtn").addEventListener("click", async () => {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+<script type="module">
+  import { login } from "./js/auth.js";
+  import { auth } from "./js/firebase.js";
+  import { signOut } from
+  "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-  if (!email || !password) {
-    alert("عمّر الإيميل والباسورد");
-    return;
-  }
+  // 🔥 نفرغ أي session قديمة
+  await signOut(auth);
 
-  try {
-    await login(email, password);
-    window.location.href = "dashboard.html";
-  } catch (e) {
-    alert("Login error: " + e.message);
-  }
-});
+  document.getElementById("loginBtn").onclick = async () => {
+    const email = email.value;
+    const password = password.value;
+
+    if (!email || !password) {
+      alert("عمّر الإيميل والباسورد");
+      return;
+    }
+
+    try {
+      await login(email, password);
+      window.location.href = "dashboard.html";
+    } catch (e) {
+      alert(e.message);
+    }
+  };
+</script>
+
+</body>
+</html>
