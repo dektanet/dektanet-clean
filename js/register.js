@@ -2,7 +2,6 @@ import { auth, db } from "./firebase.js";
 import {
   createUserWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
 import {
   doc,
   setDoc
@@ -14,10 +13,9 @@ export async function register(email, password, phone) {
 
   const user = userCredential.user;
 
-  // ✅ هنا الإصلاح
   await setDoc(doc(db, "users", user.uid), {
     email: email,
-    phone: phone,
+    phone: phone || "",
     balance: 0,
     createdAt: Date.now()
   });
