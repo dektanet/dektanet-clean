@@ -13,28 +13,89 @@
 <div id="content" style="display:none">
   <p>DEKTA: <span id="dekta">0</span></p>
   <p>DEKTA-BOX: <span id="box">30</span></p>
+  <p>Status: <strong id="boxStatus">INACTIVE</strong></p>
+
+  <button id="activateBoxBtn">Activate BOX (30 DEKTA)</button>
+  <br><br>
   <button id="logoutBtn">Logout</button>
 </div>
 
 <script type="module">
-  import { auth } from "./js/firebase.js";
-  import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { auth, db } from "./js/firebase.js";
+  import {
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import {
+    doc,
+    getDoc,
+    updateDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const loading = document.getElementById("loading");
   const content = document.getElementById("content");
 
-  onAuthStateChanged(auth, (user) => {
+  const dektaEl = document.getElementById("dekta");
+  const boxEl = document.getElementById("box");
+  const boxStatusEl = document.getElementById("boxStatus");
+  const activateBtn = document.getElementById("activateBoxBtn");
+
+  let currentUserRef = null;
+  let currentUserData = null;
+
+  // 🔐 Auth Guard
+  onAuthStateChanged(auth, async (user) => {
     if (!user) {
-      // ❌ موش عامل login
       window.location.href = "login.html";
       return;
     }
 
-    // ✅ عامل login
+    currentUserRef = doc(db, "users", user.uid);
+    const snap = await getDoc(currentUserRef);
+
+    if (!snap.exists()) {
+      alert("User data not found");
+      return;
+    }
+
+    currentUserData = snap.data();
+
+    dektaEl.textContent = currentUserData.balance ?? 0;
+    boxEl.textContent = 30;
+
+    if (currentUserData.boxStatus === "ACTIVE") {
+      boxStatusEl.textContent = "ACTIVE";
+      activateBtn.disabled = true;
+      activateBtn.textContent = "BOX ACTIVE";
+    } else {
+      boxStatusEl.textContent = "INACTIVE";
+    }
+
     loading.style.display = "none";
     content.style.display = "block";
   });
 
+  // 📦 Activate BOX
+  activateBtn.onclick = async () => {
+    if (!currentUserData) return;
+
+    if (currentUserData.balance < 30) {
+      alert("رصيد DEKTA غير كافي");
+      return;
+    }
+
+    await updateDoc(currentUserRef, {
+      balance: currentUserData.balance - 30,
+      boxStatus: "ACTIVE",
+      boxActivatedAt: serverTimestamp()
+    });
+
+    alert("تم تفعيل الصندوق ✅");
+    window.location.reload();
+  };
+
+  // 🚪 Logout
   document.getElementById("logoutBtn").onclick = async () => {
     await signOut(auth);
     localStorage.clear();
