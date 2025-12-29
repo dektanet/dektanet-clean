@@ -5,7 +5,6 @@
   <title>Login | DEKTANET</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
-
 <body>
 
   <div class="container">
@@ -21,12 +20,6 @@
     </p>
   </div>
 
-  <!-- سكريبتات عادية -->
-  <script src="js/theme.js"></script>
-  <script src="js/i18n.js"></script>
-  <script src="js/settings.js"></script>
-
-  <!-- ✅ سكريبت module -->
   <script type="module">
     import { login } from "./js/auth.js";
 
@@ -35,20 +28,19 @@
       const password = document.getElementById("password").value;
 
       if (!email || !password) {
-        alert("عمر الخانات الكل");
+        alert("عمّر البيانات");
         return;
       }
 
       try {
         await login(email, password);
+        alert("تم الدخول بنجاح");
         window.location.href = "dashboard.html";
-      } catch (err) {
-        alert(err.message);
+      } catch (e) {
+        alert(e.message);
       }
     };
   </script>
-
-  <script type="module" src="js/header.js"></script>
 
 </body>
 </html>
