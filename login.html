@@ -10,15 +10,13 @@
 
 <input id="email" type="email" placeholder="Email"><br><br>
 <input id="password" type="password" placeholder="Password"><br><br>
-
 <button id="loginBtn">Login</button>
 
 <script type="module">
   import { auth } from "./js/firebase.js";
-  import { signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { login } from "./js/auth.js";
+  import { signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-  // 🔥 نفرّغ أي session قديمة (إجباري)
+  // 🔥 تنظيف أي session قديمة
   await signOut(auth);
 
   document.getElementById("loginBtn").onclick = async () => {
@@ -31,10 +29,10 @@
     }
 
     try {
-      await login(email, password);
+      await signInWithEmailAndPassword(auth, email, password);
       window.location.href = "dashboard.html";
     } catch (e) {
-      alert("Login error: " + e.message);
+      alert(e.message);
     }
   };
 </script>
