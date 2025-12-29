@@ -1,101 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Dashboard</title>
 </head>
 <body>
 
 <h2>Dashboard</h2>
 
-<p id="loading">Loading...</p>
+<p>DEKTA: <span id="dekta">0</span></p>
+<p>DEKTA-BOX: <span id="boxBalance">30</span></p>
 
-<div id="content" style="display:none">
-  <p>DEKTA: <span id="dekta">0</span></p>
-  <p>DEKTA-BOX: <span id="box">30</span></p>
-  <p>Status: <strong id="boxStatus">INACTIVE</strong></p>
+<p>Status: <b id="status">INACTIVE</b></p>
 
-  <button id="activateBoxBtn">Activate BOX (30 DEKTA)</button>
-  <br><br>
-  <button id="logoutBtn">Logout</button>
-</div>
+<button id="activateBtn">Activate BOX (30 DEKTA)</button>
+<br><br>
+<button id="logoutBtn">Logout</button>
 
 <script type="module">
   import { auth, db } from "./js/firebase.js";
-  import {
-    onAuthStateChanged,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import {
-    doc,
-    getDoc,
-    updateDoc,
-    serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  const loading = document.getElementById("loading");
-  const content = document.getElementById("content");
+  const statusEl = document.getElementById("status");
+  const activateBtn = document.getElementById("activateBtn");
 
-  const dektaEl = document.getElementById("dekta");
-  const boxEl = document.getElementById("box");
-  const boxStatusEl = document.getElementById("boxStatus");
-  const activateBtn = document.getElementById("activateBoxBtn");
-
-  let currentUserRef = null;
-  let currentUserData = null;
-
-  // 🔐 Auth Guard
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
       window.location.href = "login.html";
       return;
     }
 
-    currentUserRef = doc(db, "users", user.uid);
-    const snap = await getDoc(currentUserRef);
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
 
-    if (!snap.exists()) {
-      alert("User data not found");
-      return;
+    if (!snap.exists()) return;
+
+    const data = snap.data();
+
+    if (data.box?.status === "active") {
+      statusEl.textContent = "ACTIVE";
+      activateBtn.style.display = "none";
     }
-
-    currentUserData = snap.data();
-
-    dektaEl.textContent = currentUserData.balance ?? 0;
-    boxEl.textContent = 30;
-
-    if (currentUserData.boxStatus === "ACTIVE") {
-      boxStatusEl.textContent = "ACTIVE";
-      activateBtn.disabled = true;
-      activateBtn.textContent = "BOX ACTIVE";
-    } else {
-      boxStatusEl.textContent = "INACTIVE";
-    }
-
-    loading.style.display = "none";
-    content.style.display = "block";
   });
 
-  // 📦 Activate BOX
   activateBtn.onclick = async () => {
-    if (!currentUserData) return;
+    const user = auth.currentUser;
+    if (!user) return;
 
-    if (currentUserData.balance < 30) {
-      alert("رصيد DEKTA غير كافي");
-      return;
-    }
+    const userRef = doc(db, "users", user.uid);
 
-    await updateDoc(currentUserRef, {
-      balance: currentUserData.balance - 30,
-      boxStatus: "ACTIVE",
-      boxActivatedAt: serverTimestamp()
+    const now = new Date();
+    const expires = new Date();
+    expires.setDate(now.getDate() + 30);
+
+    await updateDoc(userRef, {
+      "box.status": "active",
+      "box.activatedAt": serverTimestamp(),
+      "box.expiresAt": expires
     });
 
-    alert("تم تفعيل الصندوق ✅");
-    window.location.reload();
+    alert("BOX Activated ✅ (30 days)");
+
+    statusEl.textContent = "ACTIVE";
+    activateBtn.style.display = "none";
   };
 
-  // 🚪 Logout
   document.getElementById("logoutBtn").onclick = async () => {
     await signOut(auth);
     localStorage.clear();
