@@ -6,37 +6,19 @@
 </head>
 <body>
 
-<h2>Dashboard</h2>
-
-<p>DEKTA: <span id="dekta">0</span></p>
-<p>DEKTA-BOX: <span id="box">0</span></p>
-<p>Status: <span id="status"></span></p>
+<h1>Dashboard</h1>
 
 <button id="logoutBtn">Logout</button>
 
 <script type="module">
-  import { auth, db } from "./js/firebase.js";
-  import { onAuthStateChanged, signOut }
-  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { doc, getDoc }
-  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { logout, requireAuth } from "./js/auth.js";
 
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      window.location.href = "login.html";
-      return;
-    }
-
-    const snap = await getDoc(doc(db, "users", user.uid));
-    if (snap.exists()) {
-      dekta.textContent = snap.data().dekta;
-      box.textContent = snap.data().dektaBox;
-      status.textContent = snap.data().boxStatus;
-    }
+  requireAuth((user) => {
+    console.log("User:", user.email);
   });
 
-  logoutBtn.onclick = async () => {
-    await signOut(auth);
+  document.getElementById("logoutBtn").onclick = async () => {
+    await logout();
     window.location.href = "login.html";
   };
 </script>
