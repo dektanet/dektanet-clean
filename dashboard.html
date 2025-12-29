@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Dashboard</title>
@@ -8,23 +8,35 @@
 
 <h2>Dashboard</h2>
 
-<p>DEKTA: 0</p>
-<p>DEKTA-BOX: 30</p>
+<p id="loading">Loading...</p>
 
-<button id="logoutBtn">Logout</button>
+<div id="content" style="display:none">
+  <p>DEKTA: <span id="dekta">0</span></p>
+  <p>DEKTA-BOX: <span id="box">30</span></p>
+  <button id="logoutBtn">Logout</button>
+</div>
 
 <script type="module">
-  import { checkAuth, logout } from "./js/auth.js";
+  import { auth } from "./js/firebase.js";
+  import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-  // حماية الصفحة
-  checkAuth((user) => {
+  const loading = document.getElementById("loading");
+  const content = document.getElementById("content");
+
+  onAuthStateChanged(auth, (user) => {
     if (!user) {
+      // ❌ موش عامل login
       window.location.href = "login.html";
+      return;
     }
+
+    // ✅ عامل login
+    loading.style.display = "none";
+    content.style.display = "block";
   });
 
   document.getElementById("logoutBtn").onclick = async () => {
-    await logout();
+    await signOut(auth);
     localStorage.clear();
     sessionStorage.clear();
     window.location.href = "login.html";
