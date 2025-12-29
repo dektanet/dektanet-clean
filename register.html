@@ -1,24 +1,50 @@
-import { auth, db } from "./firebase.js";
-import {
-  createUserWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {
-  doc,
-  setDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register | DEKTANET</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
 
-export async function register(email, password, phone) {
-  const userCredential =
-    await createUserWithEmailAndPassword(auth, email, password);
+<body>
 
-  const user = userCredential.user;
+<div class="container">
+  <h2>Register</h2>
 
-  await setDoc(doc(db, "users", user.uid), {
-    email: email,
-    phone: phone || "",
-    balance: 0,
-    createdAt: Date.now()
+  <input id="email" type="email" placeholder="Email" />
+  <input id="phone" type="text" placeholder="+216xxxxxxxx" />
+  <input id="password" type="password" placeholder="Password" />
+
+  <button id="registerBtn">Create Account</button>
+
+  <p>
+    Already have an account?
+    <a href="login.html">Login</a>
+  </p>
+</div>
+
+<script type="module">
+  import { register } from "./js/register.js";
+
+  document.getElementById("registerBtn").addEventListener("click", async () => {
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const password = document.getElementById("password").value;
+
+    if (!email || !password) {
+      alert("عمّر الإيميل والباسورد");
+      return;
+    }
+
+    try {
+      await register(email, password, phone);
+      alert("تم إنشاء الحساب بنجاح ✅");
+      window.location.href = "login.html";
+    } catch (err) {
+      alert(err.message);
+    }
   });
+</script>
 
-  return user;
-}
+</body>
+</html>
