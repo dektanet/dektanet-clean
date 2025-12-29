@@ -4,14 +4,18 @@ import {
   signInWithPhoneNumber,
   RecaptchaVerifier
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 import {
-  doc, setDoc, serverTimestamp
+  doc,
+  setDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const email = document.getElementById("email");
-const phone = document.getElementById("phone");
+const emailInput = document.getElementById("email");
+const phoneInput = document.getElementById("phone");
 const btn = document.getElementById("registerBtn");
 
+// reCAPTCHA (required for phone auth)
 window.recaptchaVerifier = new RecaptchaVerifier(
   auth,
   "recaptcha-container",
@@ -20,25 +24,29 @@ window.recaptchaVerifier = new RecaptchaVerifier(
 
 btn.onclick = async () => {
   try {
-
-    // ✅ EMAIL REGISTER
-    if (email.value) {
+    // ======================
+    // EMAIL REGISTER
+    // ======================
+    if (emailInput && emailInput.value) {
+      const password = "12345678"; // مؤقت
       const cred = await createUserWithEmailAndPassword(
         auth,
-        email.value,
-        "12345678" // مثال، بعد تنجّم تطوّرها
+        emailInput.value,
+        password
       );
 
       await createUserDoc(cred.user);
-      location.href = "dashboard.html";
+      window.location.href = "dashboard.html";
       return;
     }
 
-    // ✅ PHONE REGISTER
-    if (phone.value) {
+    // ======================
+    // PHONE REGISTER
+    // ======================
+    if (phoneInput && phoneInput.value) {
       const confirmation = await signInWithPhoneNumber(
         auth,
-        phone.value,
+        phoneInput.value,
         window.recaptchaVerifier
       );
 
@@ -46,26 +54,36 @@ btn.onclick = async () => {
       const result = await confirmation.confirm(code);
 
       await createUserDoc(result.user);
-      location.href = "dashboard.html";
+      window.location.href = "dashboard.html";
+      return;
     }
 
+    alert("Enter email or phone number");
   } catch (e) {
     alert(e.message);
   }
 };
 
+// ======================
+// CREATE USER MODEL
+// ======================
 async function createUserDoc(user) {
   await setDoc(doc(db, "users", user.uid), {
+    uid: user.uid,
     email: user.email || null,
     phone: user.phoneNumber || null,
+    role: "user",
 
     balances: {
       dekta: 0,
-      babydekta: 0
+      babyDekta: 0,
+      dektaBox: 30 // 🎁 Welcome Bonus (NOT withdrawable)
     },
 
-    card: {
-      status: "NOT_ACTIVE",
+    box: {
+      name: "DEKTA-BOX-WIN",
+      status: "inactive", // inactive | active | expired
+      level: "A",
       activatedAt: null,
       expiresAt: null
     },
@@ -73,10 +91,17 @@ async function createUserDoc(user) {
     referral: {
       by: null,
       level1Count: 0,
-      level2Count: 0
+      level2Count: 0,
+      earned: {
+        dekta: 0,
+        dektaBox: 0
+      }
     },
 
-    role: "user",
+    withdraw: {
+      paused: false
+    },
+
     createdAt: serverTimestamp()
   });
 }
