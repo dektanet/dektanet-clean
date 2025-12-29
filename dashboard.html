@@ -1,26 +1,20 @@
-<!-- ================= dashboard.html ================= -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Dashboard | DEKTANET</title>
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-<body>
+<div class="container">
+  <h2>Dashboard</h2>
 
-  <div class="container">
-    <h2>Dashboard</h2>
-    <p id="userInfo">Loading...</p>
-  </div>
+  <pre id="userInfo">Loading...</pre>
 
-  <script src="js/theme.js"></script>
-  <script src="js/i18n.js"></script>
-  <script src="js/settings.js"></script>
-  <script src="js/firebase.js"></script>
+  <hr>
 
-  <script type="module" src="js/guard.js"></script>
-  <script type="module" src="js/dashboard.js"></script>
-  <script type="module" src="js/header.js"></script>
+  <h3>Balances</h3>
+  <p>DEKTA: <b id="dektaBalance">0</b></p>
+  <p>DEKTA-BOX: <b id="boxBalance">30</b></p>
 
-</body>
-</html>
+  <hr>
+
+  <h3>DEKTA-BOX-WIN</h3>
+  <p>Status: <b id="boxStatus">INACTIVE</b></p>
+
+  <button id="activateBoxBtn">
+    🔑 Activate BOX – 30 DEKTA
+  </button>
+</div>
