@@ -1,22 +1,37 @@
-<script type="module">
-  import { login } from "./js/auth.js";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+</head>
+<body>
 
-  document.getElementById("loginBtn").addEventListener("click", async () => {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
+  <h2>Login</h2>
 
-    if (!email || !password) {
-      alert("عمّر الإيميل والباسورد");
-      return;
-    }
+  <input id="email" type="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+  <button id="loginBtn">Login</button>
 
-    try {
-      const user = await login(email, password);
-      console.log("LOGGED IN:", user.uid); // 🔥 مهم
-      window.location.href = "dashboard.html";
-    } catch (e) {
-      alert("❌ " + e.message);
-      console.error(e);
-    }
-  });
-</script>
+  <script type="module">
+    import { login } from "./js/auth.js";
+
+    document.getElementById("loginBtn").addEventListener("click", async () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      if (!email || !password) {
+        alert("عمّر الإيميل والباسورد");
+        return;
+      }
+
+      try {
+        await login(email, password);
+        window.location.href = "dashboard.html";
+      } catch (e) {
+        alert("Login error: " + e.message);
+      }
+    });
+  </script>
+
+</body>
+</html>
