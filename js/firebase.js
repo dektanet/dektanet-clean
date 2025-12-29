@@ -4,8 +4,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-aut
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-const firebaseConfig = {
-  apiKey: "AIzaSy....",
+  apiKey: "AIzaSyDDFmbl1QM74US0KDuIR1xEGoCFJ",
   authDomain: "dektanet-app.firebaseapp.com",
   projectId: "dektanet-app",
   storageBucket: "dektanet-app.appspot.com",
