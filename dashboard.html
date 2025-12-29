@@ -1,62 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
   <title>Dashboard</title>
 </head>
 <body>
 
-  <h2>Dashboard</h2>
+<h2>Dashboard</h2>
 
-  <p id="loading">Loading...</p>
+<p>DEKTA: 0</p>
+<p>DEKTA-BOX: 30</p>
 
-  <div id="content" style="display:none;">
-    <p>DEKTA: <span id="dekta">0</span></p>
-    <p>DEKTA-BOX: <span id="box">30</span></p>
+<button id="logoutBtn">Logout</button>
 
-    <button id="logoutBtn">Logout</button>
-  </div>
+<script type="module">
+  import { checkAuth, logout } from "./js/auth.js";
 
-  <!-- 🔐 حماية + تحميل البيانات -->
-  <script type="module">
-    import { auth, db } from "./js/firebase.js";
-    import { onAuthStateChanged } from
-      "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { doc, getDoc } from
-      "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-    import { logout } from "./js/auth.js";
-
-    const loading = document.getElementById("loading");
-    const content = document.getElementById("content");
-
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        // ❌ موش مسجّل
-        window.location.href = "login.html";
-        return;
-      }
-
-      // ✅ مسجّل → نجيب بياناته
-      const snap = await getDoc(doc(db, "users", user.uid));
-
-      if (snap.exists()) {
-        const data = snap.data();
-        document.getElementById("dekta").innerText = data.balance ?? 0;
-        document.getElementById("box").innerText = 30;
-      }
-
-      loading.style.display = "none";
-      content.style.display = "block";
-    });
-
-    // 🔓 Logout
-    document.getElementById("logoutBtn").onclick = async () => {
-      await logout();
-      localStorage.clear();
-      sessionStorage.clear();
+  // حماية الصفحة
+  checkAuth((user) => {
+    if (!user) {
       window.location.href = "login.html";
-    };
-  </script>
+    }
+  });
+
+  document.getElementById("logoutBtn").onclick = async () => {
+    await logout();
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = "login.html";
+  };
+</script>
 
 </body>
 </html>
