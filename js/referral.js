@@ -1,37 +1,43 @@
 import { auth, db } from "./firebase.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-auth.onAuthStateChanged(async (user) => {
-  if (!user) {
-    window.location.href = "login.html";
-    return;
+const refLinkDiv = document.getElementById("refLink");
+const copyBtn = document.getElementById("copyBtn");
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return;
+
+  try {
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
+
+    if (!snap.exists()) {
+      refLinkDiv.innerText = "User data not found";
+      return;
+    }
+
+    const data = snap.data();
+
+    if (!data.referral || !data.referral.code) {
+      refLinkDiv.innerText = "Referral code missing";
+      return;
+    }
+
+    const code = data.referral.code;
+
+    const link =
+      "https://dektanet.github.io/dektanet-clean/register.html?ref=" +
+      code;
+
+    refLinkDiv.innerText = link;
+
+    copyBtn.onclick = async () => {
+      await navigator.clipboard.writeText(link);
+      alert("Referral link copied ✅");
+    };
+  } catch (err) {
+    console.error(err);
+    refLinkDiv.innerText = "Error loading referral";
   }
-
-  const userRef = doc(db, "users", user.uid);
-  const snap = await getDoc(userRef);
-
-  if (!snap.exists()) {
-    alert("User data not found");
-    return;
-  }
-
-  const data = snap.data();
-  const email = user.email;
-  const code = data.referral?.code;
-
-  if (!code) {
-    alert("Referral code missing");
-    return;
-  }
-
-  const link = `${window.location.origin}/dektanet-clean/register.html?ref=${code}`;
-
-  document.getElementById("userEmail").innerText = email;
-  document.getElementById("refCode").innerText = code;
-  document.getElementById("refLink").value = link;
-
-  document.getElementById("copyBtn").onclick = () => {
-    navigator.clipboard.writeText(link);
-    alert("Referral link copied ✅");
-  };
 });
