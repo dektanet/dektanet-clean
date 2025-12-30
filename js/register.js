@@ -1,61 +1,37 @@
 import { auth, db } from "./firebase.js";
-import {
-  createUserWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-import {
-  doc,
-  setDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+document.getElementById("registerBtn").onclick = async () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-// توليد كود إحالة أرقام فقط
-function generateReferralCode() {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-}
+  if (!email || !password) {
+    alert("Fill all fields");
+    return;
+  }
 
-// قراءة ref من الرابط
-function getReferralFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("ref"); // يرجّع null إذا ما فماش
-}
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
 
-export async function register(email, password, phone) {
-  const refBy = getReferralFromURL(); // كود الإحالة إن وجد
+    await setDoc(doc(db, "users", cred.user.uid), {
+      email,
+      createdAt: Date.now(),
+      balances: {
+        dekta: 0,
+        babydekta: 0
+      },
+      referral: {
+        code: Math.floor(100000 + Math.random() * 900000).toString(),
+        by: "",
+        level1: 0,
+        level2: 0
+      }
+    });
 
-  const userCredential =
-    await createUserWithEmailAndPassword(auth, email, password);
-
-  const user = userCredential.user;
-
-  const myReferralCode = generateReferralCode();
-
-  await setDoc(doc(db, "users", user.uid), {
-    email,
-    phone,
-
-    referral: {
-      code: myReferralCode,
-      by: refBy || null,
-      level1: 0,
-      level2: 0
-    },
-
-    balances: {
-      dekta: 0,
-      babydekta: 0,
-      dektabox: 0
-    },
-
-    box: {
-      status: "inactive",
-      activatedAt: null,
-      expiresAt: null,
-      level: "A"
-    },
-
-    createdAt: serverTimestamp()
-  });
-
-  return user;
-}
+    alert("Registered successfully");
+    window.location.href = "login.html";
+  } catch (e) {
+    alert(e.message);
+  }
+};
