@@ -1,13 +1,13 @@
-// js/firebase.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+// Firebase CDN
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDDFmblIQM74uszOkDURiXrEGoCFJGdh_o",
   authDomain: "dektanet-app.firebaseapp.com",
   projectId: "dektanet-app",
-  storageBucket: "dektanet-app.appspot.com",
+  storageBucket: "dektanet-app.firebasestorage.app",
   messagingSenderId: "891992962502",
   appId: "1:891992962502:web:b18d97723d92b12d0feec7"
 };
