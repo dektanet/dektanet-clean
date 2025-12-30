@@ -1,46 +1,158 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>Register</title>
+  <title>Register | DEKTANET</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      background: #0b0b0f;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: #14141f;
+      padding: 20px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 350px;
+      box-shadow: 0 0 15px #6a00ff55;
+    }
+
+    h2 {
+      text-align: center;
+      color: #b983ff;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #6a00ff;
+      border: none;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .ref {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #aaa;
+      text-align: center;
+    }
+  </style>
 </head>
+
 <body>
 
-<h2>Register</h2>
+  <div class="box">
+    <h2>Register</h2>
 
-<input id="email" type="email" placeholder="Email"><br><br>
-<input id="phone" type="text" placeholder="Phone"><br><br>
-<input id="password" type="password" placeholder="Password"><br><br>
+    <input id="email" type="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
 
-<button id="registerBtn">Create Account</button>
+    <button onclick="register()">Create Account</button>
 
-<script type="module">
-  import { auth } from "./js/firebase.js";
-  import { signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { register } from "./js/register.js";
+    <div class="ref" id="refInfo"></div>
+  </div>
 
-  // 🔥 نفرّغ أي session قديمة (إجباري)
-  await signOut(auth);
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-  document.getElementById("registerBtn").onclick = async () => {
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
-    const password = document.getElementById("password").value;
+  <script>
+    // 🔹 Firebase config (متاعك)
+    const firebaseConfig = {
+      apiKey: "PUT_YOUR_KEY",
+      authDomain: "PUT_YOUR_DOMAIN",
+      projectId: "dektanet"
+    };
 
-    if (!email || !password) {
-      alert("عمّر الإيميل والباسورد");
-      return;
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // 🔹 قراءة referral من الرابط
+    const params = new URLSearchParams(window.location.search);
+    const referralCode = params.get("ref");
+
+    if (referralCode) {
+      localStorage.setItem("referral_code", referralCode);
+      document.getElementById("refInfo").innerText =
+        "Registered via referral: " + referralCode;
     }
 
-    try {
-      await register(email, password, phone);
-      alert("تم إنشاء الحساب بنجاح");
-      window.location.href = "login.html";
-    } catch (e) {
-      alert(e.message);
+    // 🔹 Register function
+    function register() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      if (!email || !password) {
+        alert("Fill all fields");
+        return;
+      }
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((cred) => {
+          const uid = cred.user.uid;
+
+          // 🔹 referral
+          const refBy = localStorage.getItem("referral_code") || "";
+
+          // 🔹 توليد كود إحالة خاص بالمستخدم
+          const myRefCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+          return db.collection("users").doc(uid).set({
+            email: email,
+            language: "ar",
+
+            balances: {
+              dekta: 0,
+              babydekta: 0,
+              dektaboxEarn: 0
+            },
+
+            box: {
+              status: "inactive"
+            },
+
+            referral: {
+              code: myRefCode,
+              by: refBy,
+              level1: 0,
+              level2: 0
+            },
+
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        })
+        .then(() => {
+          alert("Account created successfully");
+          window.location.href = "login.html";
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
     }
-  };
-</script>
+  </script>
 
 </body>
 </html>
