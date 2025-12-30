@@ -12,13 +12,9 @@ form.addEventListener("submit", async (e) => {
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
-
     alert("Login success ✅");
-
-    // REDIRECT TO DASHBOARD
     window.location.href = "dashboard.html";
-
-  } catch (error) {
-    alert(error.message);
+  } catch (err) {
+    alert(err.message);
   }
 });
