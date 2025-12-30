@@ -1,12 +1,13 @@
-import { login } from "./auth.js";
+import { auth } from "./firebase.js";
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 document.getElementById("loginBtn").onclick = async () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
   try {
-    await login(
-      document.getElementById("email").value,
-      document.getElementById("password").value
-    );
-    window.location.href = "dashboard.html";
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location.href = "referral.html";
   } catch (e) {
     alert(e.message);
   }
