@@ -1,131 +1,79 @@
-// ================================
-// ACTIVBOX LOGIC – DEKTANET
-// ================================
-
-import { db, auth } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 import {
   doc,
   getDoc,
-  setDoc,
   updateDoc,
+  increment,
   serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-import { onAuthStateChanged } from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+const btn = document.getElementById("activateBox");
 
-// ================================
-// CONSTANTS
-// ================================
-const BOX_DURATION_DAYS = 30;
-const FIRST_KEY_PRICE = 30;   // أول تفعيل
-const REACTIVE_KEY_PRICE = 10; // تجديد
+if (btn) {
+  btn.addEventListener("click", async () => {
+    const user = auth.currentUser;
+    if (!user) {
+      alert("❌ لازم Login");
+      return;
+    }
 
-// ================================
-// HELPERS
-// ================================
-function addDays(date, days) {
-  const d = new Date(date);
-  d.setDate(d.getDate() + days);
-  return d;
-}
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
 
-function isExpired(expiresAt) {
-  if (!expiresAt) return true;
-  return new Date() > expiresAt.toDate();
-}
+    if (!snap.exists()) {
+      alert("❌ User غير موجود");
+      return;
+    }
 
-// ================================
-// INIT USER BOX (ON REGISTER)
-// ================================
-export async function initUserBox(uid) {
-  const ref = doc(db, "boxes", uid);
-  const snap = await getDoc(ref);
+    const data = snap.data();
 
-  if (!snap.exists()) {
-    await setDoc(ref, {
-      status: "INACTIVE",        // ACTIVE | INACTIVE
-      activatedAt: null,
-      expiresAt: null,
-      level: "LEVEL-A",          // قابل للتوسعة
-      totalEarned: 0,            // أرباح الإحالات
-      createdAt: serverTimestamp()
+    /* ====== إعدادات المفتاح ====== */
+    const KEY_PRICE = 30; // سعر المفتاح
+    const BOX_DAYS = 30;  // مدة الصندوق
+
+    /* ====== تحقق ====== */
+    if (data.box?.status === "active") {
+      alert("⚠️ الصندوق مفعّل بالفعل");
+      return;
+    }
+
+    if ((data.balances?.dekta || 0) < KEY_PRICE) {
+      alert("❌ DEKTA غير كافية");
+      return;
+    }
+
+    /* ====== تواريخ ====== */
+    const now = new Date();
+    const expires = new Date();
+    expires.setDate(expires.getDate() + BOX_DAYS);
+
+    /* ====== تفعيل الصندوق ====== */
+    await updateDoc(userRef, {
+      "balances.dekta": increment(-KEY_PRICE),
+      "box.status": "active",
+      "box.activatedAt": serverTimestamp(),
+      "box.expiresAt": expires
     });
-  }
-}
 
-// ================================
-// ACTIVATE BOX (FIRST TIME)
-// ================================
-export async function activateBox(uid) {
-  const ref = doc(db, "boxes", uid);
+    /* ====== إحالة (Level 1 فقط) ====== */
+    if (data.referral?.by) {
+      const refRef = doc(db, "users", data.referral.by);
+      const refSnap = await getDoc(refRef);
 
-  const now = new Date();
-  const expiresAt = addDays(now, BOX_DURATION_DAYS);
+      if (refSnap.exists()) {
+        const refData = refSnap.data();
 
-  await updateDoc(ref, {
-    status: "ACTIVE",
-    activatedAt: now,
-    expiresAt: expiresAt,
-    lastAction: "ACTIVATE",
-    updatedAt: serverTimestamp()
+        // يتحسب الربح كان المُحيل Active
+        if (refData.box?.status === "active") {
+          await updateDoc(refRef, {
+            "balances.dekta": increment(4),
+            "referral.level1": increment(1)
+          });
+        }
+      }
+    }
+
+    alert("✅ تم تفعيل الصندوق بنجاح");
+    location.reload();
   });
 }
-
-// ================================
-// REACTIVATE BOX
-// ================================
-export async function reactivateBox(uid) {
-  const ref = doc(db, "boxes", uid);
-
-  const snap = await getDoc(ref);
-  if (!snap.exists()) throw new Error("BOX_NOT_FOUND");
-
-  const data = snap.data();
-  let baseDate = new Date();
-
-  if (data.expiresAt && !isExpired(data.expiresAt)) {
-    baseDate = data.expiresAt.toDate();
-  }
-
-  const newExpiresAt = addDays(baseDate, BOX_DURATION_DAYS);
-
-  await updateDoc(ref, {
-    status: "ACTIVE",
-    expiresAt: newExpiresAt,
-    lastAction: "REACTIVATE",
-    updatedAt: serverTimestamp()
-  });
-}
-
-// ================================
-// CHECK BOX STATUS (FOR UI)
-// ================================
-export async function getBoxStatus(uid) {
-  const ref = doc(db, "boxes", uid);
-  const snap = await getDoc(ref);
-
-  if (!snap.exists()) {
-    return { exists: false };
-  }
-
-  const data = snap.data();
-  const expired = isExpired(data.expiresAt);
-
-  return {
-    exists: true,
-    status: expired ? "INACTIVE" : data.status,
-    expiresAt: data.expiresAt,
-    level: data.level,
-    totalEarned: data.totalEarned
-  };
-}
-
-// ================================
-// AUTH LISTENER (AUTO INIT)
-// ================================
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    await initUserBox(user.uid);
-  }
-});
