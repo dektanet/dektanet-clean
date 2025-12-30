@@ -11,17 +11,17 @@ form.addEventListener("submit", async (e) => {
   const password = document.getElementById("password").value;
 
   try {
+    // Create user
     const cred = await createUserWithEmailAndPassword(auth, email, password);
+    const user = cred.user;
 
-    await setDoc(doc(db, "users", cred.user.uid), {
+    // Create Firestore user
+    await setDoc(doc(db, "users", user.uid), {
       email: email,
       createdAt: new Date(),
       balances: {
         dekta: 0,
         babydekta: 0
-      },
-      box: {
-        status: "inactive"
       },
       referral: {
         code: Math.floor(100000 + Math.random() * 900000).toString(),
@@ -31,10 +31,12 @@ form.addEventListener("submit", async (e) => {
       }
     });
 
-    alert("Account created successfully ✅");
+    alert("Registered successfully ✅");
+
+    // 🔁 AUTO REDIRECT
     window.location.href = "login.html";
 
-  } catch (err) {
-    alert(err.message);
+  } catch (error) {
+    alert(error.message);
   }
 });
