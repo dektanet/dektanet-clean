@@ -1,9 +1,11 @@
-// Firebase CDN
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initializeApp } from
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth } from
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore } from
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-export const firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyDDFmblIQM74uszOkDURiXrEGoCFJGdh_o",
   authDomain: "dektanet-app.firebaseapp.com",
   projectId: "dektanet-app",
