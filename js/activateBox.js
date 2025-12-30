@@ -1,85 +1,131 @@
-import { auth, db } from "./firebase.js";
+// ================================
+// ACTIVBOX LOGIC – DEKTANET
+// ================================
+
+import { db, auth } from "./firebase.js";
 import {
   doc,
   getDoc,
+  setDoc,
   updateDoc,
-  increment
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const btn = document.getElementById("activateBox");
+import { onAuthStateChanged } from
+  "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-if (btn) {
-  btn.addEventListener("click", async () => {
+// ================================
+// CONSTANTS
+// ================================
+const BOX_DURATION_DAYS = 30;
+const FIRST_KEY_PRICE = 30;   // أول تفعيل
+const REACTIVE_KEY_PRICE = 10; // تجديد
 
-    const user = auth.currentUser;
-    if (!user) {
-      alert("Not logged in");
-      return;
-    }
+// ================================
+// HELPERS
+// ================================
+function addDays(date, days) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + days);
+  return d;
+}
 
-    try {
-      const userRef = doc(db, "users", user.uid);
-      const snap = await getDoc(userRef);
+function isExpired(expiresAt) {
+  if (!expiresAt) return true;
+  return new Date() > expiresAt.toDate();
+}
 
-      if (!snap.exists()) {
-        alert("User not found");
-        return;
-      }
+// ================================
+// INIT USER BOX (ON REGISTER)
+// ================================
+export async function initUserBox(uid) {
+  const ref = doc(db, "boxes", uid);
+  const snap = await getDoc(ref);
 
-      const data = snap.data();
-      const now = new Date();
-      const expires = new Date();
-      expires.setDate(expires.getDate() + 30);
+  if (!snap.exists()) {
+    await setDoc(ref, {
+      status: "INACTIVE",        // ACTIVE | INACTIVE
+      activatedAt: null,
+      expiresAt: null,
+      level: "LEVEL-A",          // قابل للتوسعة
+      totalEarned: 0,            // أرباح الإحالات
+      createdAt: serverTimestamp()
+    });
+  }
+}
 
-      const firstTime = !data.box?.activatedAt;
+// ================================
+// ACTIVATE BOX (FIRST TIME)
+// ================================
+export async function activateBox(uid) {
+  const ref = doc(db, "boxes", uid);
 
-      // ❌ الصندوق مفعل
-      if (data.box?.status === "active") {
-        alert("BOX already active");
-        return;
-      }
+  const now = new Date();
+  const expiresAt = addDays(now, BOX_DURATION_DAYS);
 
-      // 🔁 مش أول مرة → لازم رصيد
-      if (!firstTime && (data.balances?.dekta || 0) < 30) {
-        alert("Not enough DEKTA");
-        return;
-      }
-
-      // 🔁 خصم كان مش أول مرة
-      const updateData = {
-        "box.status": "active",
-        "box.activatedAt": now,
-        "box.expiresAt": expires
-      };
-
-      if (!firstTime) {
-        updateData["balances.dekta"] = increment(-30);
-      }
-
-      await updateDoc(userRef, updateData);
-
-      // 🔗 REFFERAL (كان الصندوق متاع المُحيل Active)
-      if (data.referral?.by) {
-        const refRef = doc(db, "users", data.referral.by);
-        const refSnap = await getDoc(refRef);
-
-        if (refSnap.exists()) {
-          const refData = refSnap.data();
-
-          if (refData.box?.status === "active") {
-            await updateDoc(refRef, {
-              "balances.dekta": increment(4),
-              "referral.level1": increment(1)
-            });
-          }
-        }
-      }
-
-      alert(firstTime ? "FREE BOX activated 🎁" : "BOX activated ✅");
-      location.reload();
-
-    } catch (err) {
-      alert(err.message);
-    }
+  await updateDoc(ref, {
+    status: "ACTIVE",
+    activatedAt: now,
+    expiresAt: expiresAt,
+    lastAction: "ACTIVATE",
+    updatedAt: serverTimestamp()
   });
 }
+
+// ================================
+// REACTIVATE BOX
+// ================================
+export async function reactivateBox(uid) {
+  const ref = doc(db, "boxes", uid);
+
+  const snap = await getDoc(ref);
+  if (!snap.exists()) throw new Error("BOX_NOT_FOUND");
+
+  const data = snap.data();
+  let baseDate = new Date();
+
+  if (data.expiresAt && !isExpired(data.expiresAt)) {
+    baseDate = data.expiresAt.toDate();
+  }
+
+  const newExpiresAt = addDays(baseDate, BOX_DURATION_DAYS);
+
+  await updateDoc(ref, {
+    status: "ACTIVE",
+    expiresAt: newExpiresAt,
+    lastAction: "REACTIVATE",
+    updatedAt: serverTimestamp()
+  });
+}
+
+// ================================
+// CHECK BOX STATUS (FOR UI)
+// ================================
+export async function getBoxStatus(uid) {
+  const ref = doc(db, "boxes", uid);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) {
+    return { exists: false };
+  }
+
+  const data = snap.data();
+  const expired = isExpired(data.expiresAt);
+
+  return {
+    exists: true,
+    status: expired ? "INACTIVE" : data.status,
+    expiresAt: data.expiresAt,
+    level: data.level,
+    totalEarned: data.totalEarned
+  };
+}
+
+// ================================
+// AUTH LISTENER (AUTO INIT)
+// ================================
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    await initUserBox(user.uid);
+  }
+});
