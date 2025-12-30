@@ -2,40 +2,72 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Login</title>
+  <title>Referral</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Firebase -->
+  <script type="module" src="js/firebase.js"></script>
+
+  <!-- Guard -->
+  <script type="module" src="js/guard.js"></script>
+
+  <!-- Referral Logic -->
+  <script type="module" src="js/referral.js"></script>
+
+  <style>
+    body {
+      background: #0b0b0f;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .box {
+      background: #111;
+      border: 1px solid #7f00ff;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background: #000;
+      color: #0f0;
+      border: 1px solid #7f00ff;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      background: #7f00ff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
 </head>
+
 <body>
+  <div class="box">
+    <h2>Share to Win 💰</h2>
 
-<h2>Login</h2>
+    <p><b>Email:</b> <span id="userEmail">...</span></p>
+    <p><b>Your Referral Code:</b> <span id="refCode">...</span></p>
 
-<input id="email" type="email" placeholder="Email"><br><br>
-<input id="password" type="password" placeholder="Password"><br><br>
-<button id="loginBtn">Login</button>
+    <input id="refLink" readonly />
+    <button id="copyBtn">Copy Referral Link</button>
 
-<script type="module">
-  import { auth } from "./js/firebase.js";
-  import { signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    <hr>
 
-  // 🔥 تنظيف أي session قديمة
-  await signOut(auth);
-
-  document.getElementById("loginBtn").onclick = async () => {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    if (!email || !password) {
-      alert("عمّر الإيميل والباسورد");
-      return;
-    }
-
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      window.location.href = "dashboard.html";
-    } catch (e) {
-      alert(e.message);
-    }
-  };
-</script>
-
+    <p>
+      🔹 Invite friends using your link  
+      <br>
+      🔹 When they activate account (30$)  
+      <br>
+      🔹 You earn referral rewards
+    </p>
+  </div>
 </body>
 </html>
