@@ -11,7 +11,6 @@ const btn = document.getElementById("activateBox");
 if (btn) {
   btn.addEventListener("click", async () => {
 
-    // ✅ CHECK LOGIN (مصَحَّح)
     const user = auth.currentUser;
     if (!user) {
       alert("Not logged in");
@@ -28,12 +27,11 @@ if (btn) {
       }
 
       const data = snap.data();
+      const now = new Date();
+      const expires = new Date();
+      expires.setDate(expires.getDate() + 30);
 
-      // ❌ ما عندوش رصيد
-      if ((data.balances?.dekta || 0) < 30) {
-        alert("Not enough DEKTA");
-        return;
-      }
+      const firstTime = !data.box?.activatedAt;
 
       // ❌ الصندوق مفعل
       if (data.box?.status === "active") {
@@ -41,20 +39,26 @@ if (btn) {
         return;
       }
 
-      // ⏱️ حساب التواريخ
-      const now = new Date();
-      const expires = new Date();
-      expires.setDate(expires.getDate() + 30);
+      // 🔁 مش أول مرة → لازم رصيد
+      if (!firstTime && (data.balances?.dekta || 0) < 30) {
+        alert("Not enough DEKTA");
+        return;
+      }
 
-      // ✅ تفعيل الصندوق
-      await updateDoc(userRef, {
-        "balances.dekta": increment(-30),
+      // 🔁 خصم كان مش أول مرة
+      const updateData = {
         "box.status": "active",
         "box.activatedAt": now,
         "box.expiresAt": expires
-      });
+      };
 
-      // 🔗 REFFERAL LEVEL 1 (كان الصندوق متاعه Active)
+      if (!firstTime) {
+        updateData["balances.dekta"] = increment(-30);
+      }
+
+      await updateDoc(userRef, updateData);
+
+      // 🔗 REFFERAL (كان الصندوق متاع المُحيل Active)
       if (data.referral?.by) {
         const refRef = doc(db, "users", data.referral.by);
         const refSnap = await getDoc(refRef);
@@ -71,7 +75,7 @@ if (btn) {
         }
       }
 
-      alert("BOX activated ✅");
+      alert(firstTime ? "FREE BOX activated 🎁" : "BOX activated ✅");
       location.reload();
 
     } catch (err) {
