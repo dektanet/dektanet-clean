@@ -1,138 +1,69 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Referral | DEKTANET</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Referral</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Firebase -->
+  <script type="module" src="js/firebase.js"></script>
+
+  <!-- Auth Guard -->
+  <script type="module" src="js/guard.js"></script>
+
+  <!-- Referral Logic -->
+  <script type="module" src="js/referral.js"></script>
 
   <style>
     body {
       background: #0b0b0f;
       color: #fff;
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
       padding: 20px;
+    }
+    .box {
+      background: #111;
+      border: 1px solid #7c00ff;
+      padding: 20px;
+      border-radius: 12px;
       max-width: 500px;
       margin: auto;
-    }
-
-    h2 {
-      color: #b983ff;
       text-align: center;
     }
-
-    .card {
-      background: #14141f;
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 15px;
-      box-shadow: 0 0 10px #6a00ff44;
+    h2 {
+      color: #b266ff;
     }
-
-    .label {
-      color: #aaa;
-      font-size: 13px;
-    }
-
-    .value {
-      font-size: 16px;
-      margin-bottom: 10px;
-      word-break: break-all;
-    }
-
-    button {
-      width: 100%;
+    #refLink {
+      background: #000;
       padding: 12px;
-      background: #6a00ff;
-      border: none;
-      border-radius: 6px;
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
+      border-radius: 8px;
+      margin: 15px 0;
+      word-break: break-all;
+      border: 1px dashed #7c00ff;
     }
-
-    .info {
-      font-size: 13px;
-      color: #bbb;
-      margin-top: 10px;
-      line-height: 1.6;
+    button {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      background: #7c00ff;
+      color: #fff;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      opacity: 0.85;
     }
   </style>
 </head>
-
 <body>
 
-<div class="container">
-  <h2>Share to Win 14$</h2>
+  <div class="box">
+    <h2>🔗 Your Referral Link</h2>
 
-  <div class="card">
-    <div class="label">Your Email</div>
-    <div class="value" id="userEmail">...</div>
+    <div id="refLink">Loading...</div>
 
-    <div class="label">Your Referral ID</div>
-    <div class="value" id="refCode">...</div>
-
-    <div class="label">Your Referral Link</div>
-    <div class="value" id="refLink">...</div>
-
-    <button onclick="copyLink()">Copy Referral Link</button>
+    <button id="copyBtn">Copy Link</button>
   </div>
-
-  <div class="card info">
-    🔹 Invite friends using your link<br>
-    🔹 When they register & activate BOX (30$)<br>
-    🔹 You earn up to <b>14$</b> per referral<br>
-    🔹 Earnings are added automatically
-  </div>
-</div>
-
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-<script>
-  const firebaseConfig = {
-    apiKey: "PUT_YOUR_KEY",
-    authDomain: "PUT_YOUR_DOMAIN",
-    projectId: "dektanet"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-
-  auth.onAuthStateChanged((user) => {
-    if (!user) {
-      window.location.href = "login.html";
-      return;
-    }
-
-    document.getElementById("userEmail").innerText = user.email;
-
-    db.collection("users").doc(user.uid).get().then(doc => {
-      if (!doc.exists) return;
-
-      const refCode = doc.data().referral.code;
-      const link = `https://dektanet.github.io/dektanet-clean/register.html?ref=${refCode}`;
-
-      document.getElementById("refCode").innerText = refCode;
-      document.getElementById("refLink").innerText = link;
-    });
-  });
-
-  function copyLink() {
-    const text = document.getElementById("refLink").innerText;
-    navigator.clipboard.writeText(text);
-    alert("Referral link copied");
-  }
-</script>
 
 </body>
 </html>
