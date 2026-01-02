@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Dashboard – DEKTANET</title>
+  <title>Dashboard - DEKTANET</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
 
-  <!-- HEADER -->
+  <!-- ================= HEADER ================= -->
   <header>
     <h2>DEKTANET</h2>
     <nav>
@@ -20,19 +21,18 @@
       <a href="games.html">Games</a>
       <a href="referral.html">Referral</a>
       <a href="withdraw.html">Withdraw</a>
-      <a href="login.html">Logout</a>
+      <a href="#" id="logoutBtn">Logout</a>
     </nav>
   </header>
 
-  <!-- MAIN -->
+  <!-- ================= MAIN ================= -->
   <main>
 
     <h3>Welcome to DEKTANET</h3>
 
-    <!-- ===================== -->
-    <!-- DEKTA BOX CARD -->
-    <!-- ===================== -->
+    <!-- ============ DEKTA BOX CARD ============ -->
     <div class="card">
+
       <h4>DEKTA-BOX</h4>
 
       <p>
@@ -44,18 +44,43 @@
         Activate Box
       </button>
 
-      <p id="boxInfo" style="margin-top:10px; font-size:14px; opacity:0.8;">
+      <p
+        id="boxInfo"
+        style="margin-top:10px; font-size:14px; opacity:0.8;"
+      >
         First time: 30 DEKTA – Renew: 10 DEKTA
       </p>
+
     </div>
 
   </main>
 
-  <!-- ===================== -->
-  <!-- SCRIPTS -->
-  <!-- ===================== -->
+  <!-- ================= SCRIPTS ================= -->
+
+  <!-- Firebase init -->
   <script type="module" src="js/firebase.js"></script>
+
+  <!-- Protect page (must be logged in) -->
+  <script type="module" src="js/guard.js"></script>
+
+  <!-- Box logic -->
   <script type="module" src="js/box.js"></script>
+
+  <!-- Logout -->
+  <script type="module">
+    import { auth } from "./js/firebase.js";
+    import {
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    logoutBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      await signOut(auth);
+      window.location.href = "login.html";
+    });
+  </script>
 
 </body>
 </html>
