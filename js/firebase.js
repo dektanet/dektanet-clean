@@ -9,7 +9,7 @@ const firebaseConfig = {
   projectId: "dektanet-app",
   storageBucket: "dektanet-app.firebasestorage.app",
   messagingSenderId: "891992962502",
-  appId: "1:891992962502:web:b18d97723d92b12d0feec7",
+  appId: "1:891992962502:web:b18d97723d92b12d0feec7"
 };
 
 export const app = initializeApp(firebaseConfig);
