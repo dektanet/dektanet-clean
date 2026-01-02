@@ -6,42 +6,29 @@ import {
   increment
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-export async function rewardReferral(userId, amountL1, amountL2) {
+export async function rewardReferral(userId, l1Amount, l2Amount) {
   const userRef = doc(db, "users", userId);
-  const userSnap = await getDoc(userRef);
-  if (!userSnap.exists()) return;
+  const snap = await getDoc(userRef);
+  if (!snap.exists()) return;
 
-  const userData = userSnap.data();
-  if (!userData.referral || !userData.referral.by) return;
+  const data = snap.data();
+  if (!data.referral?.by) return;
 
-  // ===== LEVEL 1 =====
-  const ref1Id = userData.referral.by;
-  const ref1Ref = doc(db, "users", ref1Id);
-  const ref1Snap = await getDoc(ref1Ref);
+  // LEVEL 1
+  const l1Ref = doc(db, "users", data.referral.by);
+  await updateDoc(l1Ref, {
+    "balances.dekta": increment(l1Amount),
+    "referral.level1": increment(1)
+  });
 
-  if (!ref1Snap.exists()) return;
-  const ref1Data = ref1Snap.data();
-
-  if (ref1Data.box?.status === "active") {
-    await updateDoc(ref1Ref, {
-      "balances.dekta": increment(amountL1),
-      "referral.level1": increment(1)
+  // LEVEL 2
+  const l1Snap = await getDoc(l1Ref);
+  const l1Data = l1Snap.data();
+  if (l1Data?.referral?.by) {
+    const l2Ref = doc(db, "users", l1Data.referral.by);
+    await updateDoc(l2Ref, {
+      "balances.dekta": increment(l2Amount),
+      "referral.level2": increment(1)
     });
-  }
-
-  // ===== LEVEL 2 =====
-  if (ref1Data.referral?.by) {
-    const ref2Ref = doc(db, "users", ref1Data.referral.by);
-    const ref2Snap = await getDoc(ref2Ref);
-
-    if (!ref2Snap.exists()) return;
-    const ref2Data = ref2Snap.data();
-
-    if (ref2Data.box?.status === "active") {
-      await updateDoc(ref2Ref, {
-        "balances.dekta": increment(amountL2),
-        "referral.level2": increment(1)
-      });
-    }
   }
 }
