@@ -1,9 +1,6 @@
-import { initializeApp } from
-  "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth } from
-  "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore } from
-  "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDDFmblIQM74uszOkDURiXrEGoCFJGdh_o",
@@ -11,9 +8,12 @@ const firebaseConfig = {
   projectId: "dektanet-app",
   storageBucket: "dektanet-app.firebasestorage.app",
   messagingSenderId: "891992962502",
-  appId: "1:891992962502:web:b18d97723d92b12d0feec7"
+  appId: "1:891992962502:web:fdb5cbb16190a3740feec7"
 };
 
-export const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
+console.log("🔥 Firebase ready");
