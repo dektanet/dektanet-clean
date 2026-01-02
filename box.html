@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DEKTANET | BOX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+
+<h2>📦 My Box</h2>
+
+<p>Status: <b id="boxStatus">---</b></p>
+<p>Expires At: <span id="boxExpire">---</span></p>
+
+<hr>
+
+<!-- FIRST ACTIVATE -->
+<button id="activateBoxBtn">
+  Activate Box (First Time)
+</button>
+
+<br><br>
+
+<!-- REACTIVATE -->
+<button id="reactivateKey">
+  Buy Reactivate Key (10$)
+</button>
+
+<hr>
+
+<button onclick="location.href='dashboard.html'">⬅ Back</button>
+
+<!-- SCRIPTS -->
+<script type="module" src="js/firebase.js"></script>
+<script type="module" src="js/activateBox.js"></script>
+<script type="module" src="js/reactivateKey.js"></script>
+<script type="module" src="js/box.js"></script>
+
+</body>
+</html>
