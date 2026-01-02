@@ -2,64 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Dashboard – DEKTANET</title>
+  <title>Dashboard - DEKTANET</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <h2>DEKTANET</h2>
-    <nav>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="tasks.html">Tasks</a>
-      <a href="games.html">Games</a>
-      <a href="referral.html">Referral</a>
-      <a href="withdraw.html">Withdraw</a>
-      <a href="login.html">Logout</a>
-    </nav>
-  </header>
+  <h2>Welcome to DEKTANET</h2>
 
-  <!-- MAIN -->
-  <main>
-    <h3>Welcome to DEKTANET</h3>
+  <hr>
 
-    <!-- BALANCES -->
-    <div class="card">
-      <p>DEKTA: <b id="dektaBalance">0</b></p>
-      <p>BABYDEKTA: <b id="babyDektaBalance">0</b></p>
-    </div>
+  <h3>DEKTA-BOX</h3>
 
-    <!-- BOX CARD -->
-    <div class="card">
-      <h4>DEKTA-BOX</h4>
+  <p>
+    Status:
+    <b id="boxStatus">INACTIVE</b>
+  </p>
 
-      <p>
-        Status:
-        <b id="boxStatus">INACTIVE</b>
-      </p>
+  <button id="activateBoxBtn">
+    Activate Box
+  </button>
 
-      <p id="boxExpireText" style="display:none;">
-        Expires at:
-        <span id="boxExpiresAt"></span>
-      </p>
+  <p style="opacity:0.7;font-size:14px">
+    First time: 30 DEKTA – Renew: 10 DEKTA
+  </p>
 
-      <button id="activateBoxBtn">
-        Activate Box
-      </button>
+  <hr>
 
-      <p style="font-size:13px;opacity:0.7;">
-        First time: 30 DEKTA – Renew: 10 DEKTA
-      </p>
-    </div>
-  </main>
+  <a href="login.html">Logout</a>
 
-  <!-- SCRIPTS (مهم) -->
+  <!-- SCRIPTS -->
   <script type="module" src="js/firebase.js"></script>
-  <script type="module" src="js/dashboard.js"></script>
   <script type="module" src="js/box.js"></script>
 
 </body>
