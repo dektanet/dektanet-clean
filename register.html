@@ -2,29 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Register – DEKTANET</title>
+  <title>Create Account - DEKTANET</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Style (تنجم تبدلو لاحقاً) -->
+  <!-- Style بسيط -->
   <style>
     body {
+      margin: 0;
+      font-family: Arial, sans-serif;
       background: #0b0f1a;
       color: #fff;
-      font-family: Arial, sans-serif;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       height: 100vh;
-      margin: 0;
     }
 
     .card {
       background: #11162a;
       padding: 25px;
-      border-radius: 10px;
+      border-radius: 12px;
       width: 100%;
-      max-width: 380px;
-      box-shadow: 0 0 20px rgba(0,0,0,.4);
+      max-width: 360px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.4);
     }
 
     h2 {
@@ -44,26 +44,26 @@
     button {
       width: 100%;
       padding: 12px;
-      background: #6a5cff;
-      color: #fff;
+      background: #6c5ce7;
       border: none;
       border-radius: 6px;
+      color: #fff;
+      font-size: 16px;
       cursor: pointer;
-      font-weight: bold;
     }
 
     button:hover {
       opacity: 0.9;
     }
 
-    .login-link {
+    .link {
       margin-top: 15px;
       text-align: center;
       font-size: 14px;
     }
 
-    .login-link a {
-      color: #6a5cff;
+    .link a {
+      color: #00cec9;
       text-decoration: none;
     }
   </style>
@@ -77,33 +77,26 @@
       type="email"
       id="email"
       placeholder="Email"
-      autocomplete="email"
+      required
     />
 
     <input
       type="password"
       id="password"
       placeholder="Password"
-      autocomplete="new-password"
+      required
     />
 
-    <input
-      type="text"
-      id="referral"
-      placeholder="Referral code (optional)"
-    />
+    <button id="registerBtn">Register</button>
 
-    <button id="registerBtn">
-      Create Account
-    </button>
-
-    <div class="login-link">
+    <div class="link">
       Already have an account?
       <a href="login.html">Login</a>
     </div>
   </div>
 
   <!-- JS -->
+  <script type="module" src="js/firebase.js"></script>
   <script type="module" src="js/register.js"></script>
 
 </body>
