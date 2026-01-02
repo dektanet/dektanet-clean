@@ -1,6 +1,6 @@
-// ================================
+// ===============================
 // DEKTA BOX MODULE (CLEAN)
-// ================================
+// ===============================
 
 import { auth, db } from "./firebase.js";
 import {
@@ -11,52 +11,70 @@ import {
   Timestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// UI
+// CONFIG
+const FIRST_PRICE = 30; // أول مرة
+const RENEW_PRICE = 10; // تجديد
+const BOX_DURATION_DAYS = 30;
+
+// DOM
 const statusEl = document.getElementById("boxStatus");
 const btn = document.getElementById("activateBoxBtn");
 
-// مدة الصندوق
-const BOX_DAYS = 30;
-
-// نحسب 30 يوم
+// ===============================
+// HELPERS
+// ===============================
 function addDays(days) {
-  const d = new Date();
-  d.setDate(d.getDate() + days);
-  return Timestamp.fromDate(d);
+  const now = new Date();
+  now.setDate(now.getDate() + days);
+  return Timestamp.fromDate(now);
 }
 
-// نحدّث الواجهة
-async function loadBoxStatus(user) {
+// ===============================
+// LOAD BOX STATUS
+// ===============================
+auth.onAuthStateChanged(async (user) => {
+  if (!user) return;
+
   const ref = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
-
   if (!snap.exists()) return;
 
   const data = snap.data();
 
-  // إذا الصندوق مفعّل وصالح
-  if (data.boxActive && data.boxExpiresAt) {
-    const now = Timestamp.now();
-
-    if (data.boxExpiresAt.toMillis() > now.toMillis()) {
-      statusEl.innerText = "ACTIVE";
-      btn.innerText = "Renew Box (10 DEKTA)";
-      return;
-    }
+  // إذا الصندوق Active وتعدّى الوقت → سكّرو
+  if (
+    data.boxActive === true &&
+    data.boxExpiresAt &&
+    data.boxExpiresAt.toMillis() < Date.now()
+  ) {
+    await updateDoc(ref, {
+      boxActive: false
+    });
+    statusEl.textContent = "INACTIVE";
+    btn.textContent = "Renew Box";
+    return;
   }
 
-  // غير ذلك
-  statusEl.innerText = "INACTIVE";
-  btn.innerText = data.boxEverActivated
-    ? "Renew Box (10 DEKTA)"
-    : "Activate Box (30 DEKTA)";
-}
+  // عرض الحالة
+  if (data.boxActive) {
+    statusEl.textContent = "ACTIVE";
+    btn.textContent = "Active";
+    btn.disabled = true;
+  } else {
+    statusEl.textContent = "INACTIVE";
+    btn.textContent = data.boxEverActivated
+      ? "Renew Box"
+      : "Activate Box";
+  }
+});
 
-// تفعيل / تجديد
-async function activateBox() {
+// ===============================
+// ACTIVATE / RENEW
+// ===============================
+btn.addEventListener("click", async () => {
   const user = auth.currentUser;
   if (!user) {
-    alert("❌ Not logged in");
+    alert("Not logged in");
     return;
   }
 
@@ -66,33 +84,28 @@ async function activateBox() {
 
   const data = snap.data();
 
-  const firstTime = !data.boxEverActivated;
-  const cost = firstTime ? 30 : 10;
-
-  if ((data.dekta || 0) < cost) {
-    alert("❌ Not enough DEKTA");
+  // لو Active ما يعمل شي
+  if (data.boxActive === true) {
+    alert("Box already active");
     return;
   }
 
+  const price = data.boxEverActivated ? RENEW_PRICE : FIRST_PRICE;
+
+  if ((data.dekta || 0) < price) {
+    alert("Not enough DEKTA");
+    return;
+  }
+
+  // UPDATE
   await updateDoc(ref, {
-    dekta: (data.dekta || 0) - cost,
+    dekta: data.dekta - price,
     boxActive: true,
     boxEverActivated: true,
-    boxExpiresAt: addDays(BOX_DAYS),
+    boxExpiresAt: addDays(BOX_DURATION_DAYS),
     updatedAt: serverTimestamp()
   });
 
-  alert("✅ DEKTA-BOX Activated");
+  alert("DEKTA-BOX Activated");
   location.reload();
-}
-
-// EVENTS
-if (btn) {
-  btn.addEventListener("click", activateBox);
-}
-
-// AUTH LISTENER
-auth.onAuthStateChanged((user) => {
-  if (!user) return;
-  loadBoxStatus(user);
 });
