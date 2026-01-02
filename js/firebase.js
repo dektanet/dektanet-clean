@@ -1,19 +1,26 @@
+// ================================
+// FIREBASE INIT (CDN - CLEAN)
+// ================================
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// 🔐 Firebase Config (متاعك)
 const firebaseConfig = {
   apiKey: "AIzaSyDDFmblIQM74uszOkDURiXrEGoCFJGdh_o",
   authDomain: "dektanet-app.firebaseapp.com",
   projectId: "dektanet-app",
   storageBucket: "dektanet-app.firebasestorage.app",
   messagingSenderId: "891992962502",
-  appId: "1:891992962502:web:fdb5cbb16190a3740feec7"
+  appId: "1:891992962502:web:fdb5cbb16190a3740feec7",
+  measurementId: "G-40X4YGP42W"
 };
 
-const app = initializeApp(firebaseConfig);
-
+// 🚀 Initialize
+export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-console.log("🔥 Firebase ready");
+// 🧪 Debug (باش نعرفو يخدم)
+console.log("✅ Firebase initialized (CLEAN)");
