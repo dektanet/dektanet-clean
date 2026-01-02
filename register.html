@@ -1,91 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Register | DEKTANET</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    body {
-      background: #0b0f1a;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    .card {
-      background: #11162a;
-      padding: 25px;
-      border-radius: 10px;
-      width: 100%;
-      max-width: 360px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 12px;
-      border-radius: 6px;
-      border: none;
-      outline: none;
-      font-size: 14px;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #7c3aed;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #6d28d9;
-    }
-
-    .link {
-      margin-top: 15px;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    .link a {
-      color: #38bdf8;
-      text-decoration: none;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <title>Register</title>
 </head>
-
 <body>
 
-  <div class="card">
-    <h2>Create Account</h2>
+  <h2>Create Account</h2>
 
-    <input id="email" type="email" placeholder="Email">
-    <input id="password" type="password" placeholder="Password">
+  <input id="email" type="email" placeholder="Email" />
+  <br><br>
+  <input id="password" type="password" placeholder="Password" />
+  <br><br>
 
-    <button id="registerBtn">Register</button>
+  <button id="registerBtn">Register</button>
 
-    <div class="link">
-      Already have an account?
-      <a href="login.html">Login</a>
-    </div>
-  </div>
-
-  <!-- REGISTER SCRIPT -->
+  <!-- لازم type="module" -->
   <script type="module" src="js/register.js"></script>
 
 </body>
