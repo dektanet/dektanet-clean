@@ -2,66 +2,100 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Login | DEKTANET</title>
+  <title>Login</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background: #fff;
+      width: 100%;
+      max-width: 380px;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    p {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #222;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .link a {
+      color: #6a1b9a;
+      text-decoration: none;
+    }
+  </style>
 </head>
+
 <body>
 
-  <div class="container">
-    <h1>Login</h1>
+  <div class="card">
+    <h2>Login</h2>
     <p>Access your account</p>
 
-    <!-- EMAIL -->
-    <input
-      type="email"
-      id="email"
-      placeholder="Email address"
-      required
-    />
+    <form>
+      <input id="email" type="email" placeholder="Email" required />
+      <input id="password" type="password" placeholder="Password" required />
 
-    <!-- PASSWORD -->
-    <input
-      type="password"
-      id="password"
-      placeholder="Password"
-      required
-    />
+      <button type="submit">Login</button>
+    </form>
 
-    <!-- LOGIN BUTTON -->
-    <button id="loginBtn" class="btn">
-      Login
-    </button>
-
-    <p style="margin-top:15px;">
-      Don’t have an account?
-      <a href="register.html">Register</a>
-    </p>
+    <div class="link">
+      No account?
+      <a href="register.html">Create one</a>
+    </div>
   </div>
 
-  <!-- SCRIPTS -->
-  <script type="module">
-    import { loginUser } from "./js/login.js";
-
-    document.getElementById("loginBtn").onclick = async () => {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-
-      if (!email || !password) {
-        alert("Please fill email and password");
-        return;
-      }
-
-      try {
-        await loginUser(email, password);
-        window.location.href = "dashboard.html";
-      } catch (err) {
-        alert(err.message);
-      }
-    };
-  </script>
+  <!-- Firebase -->
+  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="js/login.js"></script>
 
 </body>
 </html>
