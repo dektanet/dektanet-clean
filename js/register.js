@@ -1,11 +1,14 @@
+// js/register.js
 import { auth, db } from "./firebase.js";
-import { createUserWithEmailAndPassword } from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
 import {
   doc,
   setDoc,
   serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 const btn = document.getElementById("registerBtn");
 
@@ -14,7 +17,7 @@ btn.addEventListener("click", async () => {
   const password = document.getElementById("password").value.trim();
 
   if (!email || !password) {
-    alert("Email & password required");
+    alert("Email & Password required");
     return;
   }
 
@@ -23,24 +26,26 @@ btn.addEventListener("click", async () => {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     const user = cred.user;
 
-    // 2️⃣ Create Firestore user doc
+    // 2️⃣ Create Firestore user document
     await setDoc(doc(db, "users", user.uid), {
       email: user.email,
       role: "user",
-      createdAt: serverTimestamp(),
 
-      dekta: 0,
+      dekta: 30,
       babyDekta: 0,
       dektaboxEarn: 30,
 
       boxActive: false,
+      boxEverActivated: false,
       boxExpiresAt: null,
 
-      referralCode: "DEKTA" + user.uid.slice(0, 6),
-      referredBy: ""
+      referralCode: user.uid.slice(0, 8),
+      referredBy: "",
+
+      createdAt: serverTimestamp()
     });
 
-    alert("Account created");
+    alert("✅ Account created");
     window.location.href = "login.html";
 
   } catch (e) {
