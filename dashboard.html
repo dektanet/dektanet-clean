@@ -2,65 +2,65 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEKTANET Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-  <h1>Dashboard</h1>
+<!-- ================= TOP BAR ================= -->
+<header class="topbar">
+  <div class="logo">DEKTANET</div>
 
-  <p>DEKTA: <span id="dekta">0</span></p>
-  <p>DEKTA-BOX: <span id="boxPrice">30</span></p>
-  <p>Status: <b id="boxStatus">INACTIVE</b></p>
+  <div class="balances">
+    <div class="bal purple">DEKTABOX EARN $<span id="boxEarn">30</span></div>
+    <div class="bal yellow">DEKTA $<span id="dekta">0</span></div>
+    <div class="bal gray">BABYDEKTA $<span id="baby">0</span></div>
+  </div>
 
-  <button id="activateBox">Activate BOX (30 DEKTA)</button>
-  <br><br>
-  <button id="logoutBtn">Logout</button>
+  <div class="actions">
+    <button class="btn blue">Deposit</button>
+    <button class="btn green">Withdraw</button>
+    <button class="btn red" id="logoutBtn">Logout</button>
+  </div>
+</header>
 
-  <!-- Firebase -->
-  <script type="module" src="js/firebase.js"></script>
+<!-- ================= NAV ================= -->
+<nav class="nav">
+  <a href="dashboard.html" class="active">Dashboard</a>
+  <a href="#">Box</a>
+  <a href="#">Tasks</a>
+  <a href="#">Games</a>
+  <a href="#">Referral</a>
+  <a href="#">Chat</a>
+</nav>
 
-  <!-- Dashboard logic -->
-  <script type="module">
-    import { auth, db } from "./js/firebase.js";
-    import {
-      doc,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-    import {
-      onAuthStateChanged,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+<!-- ================= CONTENT ================= -->
+<main class="container">
+  <h2>Welcome to DEKTANET</h2>
 
-    const dektaEl = document.getElementById("dekta");
-    const statusEl = document.getElementById("boxStatus");
-    const logoutBtn = document.getElementById("logoutBtn");
+  <div class="cards">
+    <div class="card">
+      <h3>DEKTA-BOX</h3>
+      <p>Status: <b>INACTIVE</b></p>
+      <button class="btn purple">Activate Key $30</button>
+    </div>
 
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        location.href = "login.html";
-        return;
-      }
+    <div class="card">
+      <h3>Earn with Tasks</h3>
+      <p>Earn 0.02 BABYDEKTA per task</p>
+      <button class="btn yellow">Start Tasks</button>
+    </div>
 
-      const ref = doc(db, "users", user.uid);
-      const snap = await getDoc(ref);
+    <div class="card">
+      <h3>Play to Win</h3>
+      <p>Skill games & rewards</p>
+      <button class="btn purple">Play</button>
+    </div>
+  </div>
+</main>
 
-      if (!snap.exists()) return;
-
-      const data = snap.data();
-
-      dektaEl.textContent = data.balances?.dekta ?? 0;
-      statusEl.textContent = data.box?.status?.toUpperCase() ?? "INACTIVE";
-    });
-
-    logoutBtn.onclick = async () => {
-      await signOut(auth);
-      location.href = "login.html";
-    };
-  </script>
-
-  <!-- Activate BOX -->
-  <script type="module" src="js/activateBox.js"></script>
-
+<script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
