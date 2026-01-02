@@ -6,7 +6,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyDDFmblIQM74uszOkDURiXrEGoCFJGdh_o",
   authDomain: "dektanet-app.firebaseapp.com",
   projectId: "dektanet-app",
-  storageBucket: "dektanet-app.firebasestorage.app",
+  storageBucket: "dektanet-app.appspot.com",
   messagingSenderId: "891992962502",
   appId: "1:891992962502:web:b18d97723d92b12d0feec7"
 };
