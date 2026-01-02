@@ -1,49 +1,55 @@
-// ==============================
-// DASHBOARD MODULE
-// ==============================
+// ===============================
+// DASHBOARD MODULE (CLEAN)
+// ===============================
 
 import { auth, db } from "./firebase.js";
-
-import {
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
 import {
   doc,
-  getDoc,
-  updateDoc
+  getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Protect page
-onAuthStateChanged(auth, async (user) => {
+// DOM
+const dektaEl = document.getElementById("dektaBalance");
+const babyDektaEl = document.getElementById("babyDektaBalance");
+const boxStatusEl = document.getElementById("boxStatus");
+
+// ===============================
+// LOAD DASHBOARD DATA
+// ===============================
+auth.onAuthStateChanged(async (user) => {
   if (!user) {
+    // موش مسجل
     window.location.href = "login.html";
     return;
   }
 
-  const ref = doc(db, "users", user.uid);
-  const snap = await getDoc(ref);
+  try {
+    const ref = doc(db, "users", user.uid);
+    const snap = await getDoc(ref);
 
-  if (!snap.exists()) return;
+    if (!snap.exists()) {
+      alert("User not found in Firestore");
+      return;
+    }
 
-  const data = snap.data();
+    const data = snap.data();
 
-  document.getElementById("dekta").innerText = data.dekta || 0;
-  document.getElementById("baby").innerText = data.babydekta || 0;
-  document.getElementById("boxEarn").innerText = data.dektabox || 30;
+    // BALANCES
+    if (dektaEl) {
+      dektaEl.textContent = data.dekta ?? 0;
+    }
 
-  document.getElementById("boxStatus").innerText =
-    data.boxActive ? "ACTIVE" : "INACTIVE";
+    if (babyDektaEl) {
+      babyDektaEl.textContent = data.babyDekta ?? 0;
+    }
+
+    // BOX STATUS
+    if (boxStatusEl) {
+      boxStatusEl.textContent = data.boxActive ? "ACTIVE" : "INACTIVE";
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Dashboard load error");
+  }
 });
-
-// Logout
-document.getElementById("logoutBtn").onclick = async () => {
-  await signOut(auth);
-  window.location.href = "login.html";
-};
-
-// Activate box (logic later)
-document.getElementById("activateBoxBtn").onclick = () => {
-  alert("🔑 Box activation logic next step");
-};
