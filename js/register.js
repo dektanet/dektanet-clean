@@ -1,82 +1,54 @@
+// ================================
+// REGISTER MODULE (CLEAN)
+// ================================
+
 import { auth, db } from "./firebase.js";
 import {
   createUserWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
-  doc,
-  setDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  doc, setDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// نستنّاو الصفحة تكمل تحميل
-window.addEventListener("DOMContentLoaded", () => {
+console.log("✅ register.js loaded");
 
-  const form = document.querySelector("form");
-  if (!form) {
-    alert("Form not found");
+const btn = document.getElementById("registerBtn");
+
+btn.addEventListener("click", async () => {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  if (!email || !password) {
+    alert("❌ Email & password required");
     return;
   }
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault(); // مهمّة برشا
+  try {
+    // 🔐 Create Auth user
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    const user = cred.user;
 
-    const email = document.getElementById("email")?.value.trim();
-    const password = document.getElementById("password")?.value.trim();
-    const phone = document.getElementById("phone")?.value.trim() || "";
-    const referralCode = document.getElementById("referral")?.value.trim() || "";
+    // 🧾 Create Firestore user doc
+    await setDoc(doc(db, "users", user.uid), {
+      email: user.email,
+      createdAt: serverTimestamp(),
 
-    if (!email || !password) {
-      alert("Email و Password إجباريين");
-      return;
-    }
+      // 🔰 DEFAULT VALUES (حسب المنطق متاعنا)
+      dekta: 0,
+      babydekta: 0,
+      dektaboxEarn: 30, // 🎁 Welcome bonus
+      boxActive: false,
+      boxExpiresAt: null,
+      referralCode: user.uid.slice(0, 8) // code إحالة بسيط
+    });
 
-    if (password.length < 6) {
-      alert("كلمة السر لازمها 6 حروف على الأقل");
-      return;
-    }
+    alert("✅ Account created successfully");
 
-    try {
-      // 1️⃣ إنشاء حساب Auth
-      const cred = await createUserWithEmailAndPassword(auth, email, password);
-      const user = cred.user;
+    // 🔁 Redirect
+    window.location.href = "login.html";
 
-      // 2️⃣ إنشاء User في Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        email: email,
-        phone: phone,
-        createdAt: serverTimestamp(),
-
-        // 🎁 هدية ترحيب
-        balances: {
-          dektabox: 30,   // أصول مجانية
-          dektaboxEarn: 0,
-          babydekta: 0
-        },
-
-        box: {
-          status: "inactive",   // ما فماش صندوق مفتوح
-          type: null,
-          activatedAt: null,
-          expiresAt: null
-        },
-
-        referral: {
-          code: Math.floor(100000 + Math.random() * 900000).toString(),
-          by: referralCode || null,
-          level1: 0,
-          level2: 0
-        },
-
-        language: "ar"
-      });
-
-      // 3️⃣ تحويل مباشر للـ Login
-      window.location.href = "login.html";
-
-    } catch (err) {
-      alert(err.message);
-      console.error(err);
-    }
-  });
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  }
 });
