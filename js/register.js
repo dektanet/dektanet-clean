@@ -1,8 +1,11 @@
 import { auth, db } from "./firebase.js";
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-document.getElementById("registerBtn").onclick = async () => {
+const btn = document.getElementById("registerBtn");
+const msg = document.getElementById("msg");
+
+btn.onclick = async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
@@ -11,17 +14,16 @@ document.getElementById("registerBtn").onclick = async () => {
 
     await setDoc(doc(db, "users", cred.user.uid), {
       email: email,
+      role: "user",
       dekta: 0,
       babyDekta: 0,
       boxActive: false,
-      boxEverActivated: false,
-      boxExpiresAt: null,
-      role: "user",
-      createdAt: serverTimestamp()
+      createdAt: new Date()
     });
 
-    window.location.href = "dashboard.html";
+    msg.innerText = "✅ Registered successfully";
+
   } catch (e) {
-    alert(e.message);
+    msg.innerText = e.message;
   }
 };
