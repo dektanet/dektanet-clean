@@ -1,69 +1,50 @@
-m// ================================
-// REGISTER MODULE (CLEAN VERSION)
-// ================================
-
 import { auth, db } from "./firebase.js";
-
 import {
   createUserWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
 import {
-  doc,
-  setDoc,
-  serverTimestamp
+  doc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ================================
-// REGISTER FUNCTION
-// ================================
-export async function registerUser({
-  email,
-  password,
-  phone = "",
-  referralCode = null
-}) {
+console.log("✅ register.js loaded");
+
+const btn = document.getElementById("registerBtn");
+
+btn.onclick = async () => {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+
   if (!email || !password) {
-    throw new Error("Email and password are required");
+    alert("Email و Password لازم");
+    return;
   }
 
-  // 1️⃣ Create auth user
-  const cred = await createUserWithEmailAndPassword(
-    auth,
-    email,
-    password
-  );
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    const user = cred.user;
 
-  const user = cred.user;
+    await setDoc(doc(db, "users", user.uid), {
+      email,
+      phone,
+      createdAt: serverTimestamp(),
+      referralCode: Math.floor(100000 + Math.random() * 900000), // ID قصير
+      balances: {
+        dekta: 0,
+        babydekta: 0,
+        dektabox: 30 // 🎁 هدية ترحيب
+      },
+      box: {
+        active: false,
+        expiresAt: null
+      }
+    });
 
-  // 2️⃣ Generate simple referral ID (numbers only)
-  const referralId = Math.floor(
-    1000000 + Math.random() * 9000000
-  ).toString();
+    alert("✅ تم إنشاء الحساب");
+    window.location.href = "login.html";
 
-  // 3️⃣ Create user document in Firestore
-  await setDoc(doc(db, "users", user.uid), {
-    uid: user.uid,
-    email: email,
-    phone: phone,
-
-    // 🔗 Referral
-    referralId: referralId,
-    referredBy: referralCode || null,
-
-    // 💰 Balances
-    dekta: 0,
-    babydekta: 0,
-    dektaboxEarn: 30, // 🎁 Welcome bonus (assets – not withdrawable)
-
-    // 📦 BOX
-    boxActive: false,
-    boxExpiresAt: null,
-
-    // 🕒 Meta
-    createdAt: serverTimestamp(),
-    status: "active"
-  });
-
-  return user;
-}
+  } catch (err) {
+    alert("❌ " + err.message);
+    console.error(err);
+  }
+};
