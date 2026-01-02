@@ -1,53 +1,52 @@
+// js/box.js
 import { auth, db } from "./firebase.js";
 import {
   doc,
   getDoc,
   updateDoc,
   serverTimestamp,
-  Timestamp,
+  Timestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const BOX_DURATION_DAYS = 30;
-const FIRST_PRICE = 30;
-const RENEW_PRICE = 10;
 
 const statusEl = document.getElementById("boxStatus");
 const btn = document.getElementById("activateBoxBtn");
 
+const FIRST_PRICE = 30;
+const RENEW_PRICE = 10;
+const BOX_DURATION_DAYS = 30;
+
 auth.onAuthStateChanged(async (user) => {
-  if (!user) return;
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
 
   const ref = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
+
   if (!snap.exists()) return;
 
   const data = snap.data();
 
-  // 🔐 لو البوكس مفعّل
-  if (data.boxActive === true) {
-    statusEl.innerText = "ACTIVE";
+  // عرض الحالة
+  if (data.boxActive === true && data.boxExpiresAt?.toMillis() > Date.now()) {
+    statusEl.textContent = "ACTIVE";
     btn.disabled = true;
-    btn.innerText = "BOX ACTIVE";
-    return;
+    btn.textContent = "BOX ACTIVE";
+  } else {
+    statusEl.textContent = "INACTIVE";
+    btn.disabled = false;
+    btn.textContent = "Activate Box";
   }
 
-  // ❌ غير مفعّل
-  statusEl.innerText = "INACTIVE";
-  btn.disabled = false;
-  btn.innerText = "Activate Box";
-
   btn.onclick = async () => {
-    // حماية إضافية
-    if (data.boxActive === true) {
-      alert("❌ Box already active");
-      return;
-    }
+    const freshSnap = await getDoc(ref);
+    const fresh = freshSnap.data();
 
-    const price = data.boxEverActivated ? RENEW_PRICE : FIRST_PRICE;
+    const price = fresh.boxEverActivated ? RENEW_PRICE : FIRST_PRICE;
 
-    // 💸 رصيد غير كافي
-    if (data.dekta < price) {
-      alert(`❌ رصيدك غير كافي (يلزمك ${price} DEKTA)`);
+    if ((fresh.dekta || 0) < price) {
+      alert("❌ Not enough DEKTA");
       return;
     }
 
@@ -55,14 +54,14 @@ auth.onAuthStateChanged(async (user) => {
     expires.setDate(expires.getDate() + BOX_DURATION_DAYS);
 
     await updateDoc(ref, {
-      dekta: data.dekta - price,
+      dekta: fresh.dekta - price,
       boxActive: true,
       boxEverActivated: true,
       boxExpiresAt: Timestamp.fromDate(expires),
-      updatedAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
     });
 
-    alert("✅ Box Activated (Paid)");
+    alert("✅ Box Activated (PAID)");
     location.reload();
   };
 });
