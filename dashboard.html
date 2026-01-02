@@ -1,38 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Dashboard - DEKTANET</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
 </head>
 <body>
 
-  <h2>Welcome to DEKTANET</h2>
+<h2>Dashboard</h2>
 
-  <hr>
+<p>Status Box: <b id="boxStatus">...</b></p>
+<button id="activateBoxBtn">Activate Box (30 DEKTA)</button>
 
-  <h3>DEKTA-BOX</h3>
-
-  <p>
-    Status:
-    <b id="boxStatus">INACTIVE</b>
-  </p>
-
-  <button id="activateBoxBtn">
-    Activate Box
-  </button>
-
-  <p style="opacity:0.7;font-size:14px">
-    First time: 30 DEKTA – Renew: 10 DEKTA
-  </p>
-
-  <hr>
-
-  <a href="login.html">Logout</a>
-
-  <!-- SCRIPTS -->
-  <script type="module" src="js/firebase.js"></script>
-  <script type="module" src="js/box.js"></script>
-
+<script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
