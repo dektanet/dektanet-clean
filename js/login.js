@@ -1,17 +1,10 @@
 import { auth } from "./firebase.js";
 import { signInWithEmailAndPassword } from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-const btn = document.getElementById("loginBtn");
-
-btn.addEventListener("click", async () => {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-
-  if (!email || !password) {
-    alert("Email & password required");
-    return;
-  }
+document.getElementById("loginBtn").addEventListener("click", async () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
