@@ -7,11 +7,69 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    body {
+      background: #0b0f1a;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+
+    header {
+      background: #11162a;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav a {
+      color: #bbb;
+      margin-right: 15px;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      color: #fff;
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    .card {
+      background: #151b33;
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 400px;
+    }
+
+    button {
+      background: #7c5cff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .muted {
+      opacity: 0.7;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 
 <body>
 
-  <!-- ================= HEADER ================= -->
+  <!-- HEADER -->
   <header>
     <h2>DEKTANET</h2>
     <nav>
@@ -21,18 +79,16 @@
       <a href="games.html">Games</a>
       <a href="referral.html">Referral</a>
       <a href="withdraw.html">Withdraw</a>
-      <a href="#" id="logoutBtn">Logout</a>
+      <a href="login.html">Logout</a>
     </nav>
   </header>
 
-  <!-- ================= MAIN ================= -->
+  <!-- MAIN -->
   <main>
-
     <h3>Welcome to DEKTANET</h3>
 
-    <!-- ============ DEKTA BOX CARD ============ -->
+    <!-- DEKTA BOX CARD -->
     <div class="card">
-
       <h4>DEKTA-BOX</h4>
 
       <p>
@@ -41,46 +97,18 @@
       </p>
 
       <button id="activateBoxBtn">
-        Activate Box
+        Activate Box (30 DEKTA)
       </button>
 
-      <p
-        id="boxInfo"
-        style="margin-top:10px; font-size:14px; opacity:0.8;"
-      >
+      <p class="muted">
         First time: 30 DEKTA – Renew: 10 DEKTA
       </p>
-
     </div>
-
   </main>
 
-  <!-- ================= SCRIPTS ================= -->
-
-  <!-- Firebase init -->
+  <!-- SCRIPTS -->
   <script type="module" src="js/firebase.js"></script>
-
-  <!-- Protect page (must be logged in) -->
-  <script type="module" src="js/guard.js"></script>
-
-  <!-- Box logic -->
   <script type="module" src="js/box.js"></script>
-
-  <!-- Logout -->
-  <script type="module">
-    import { auth } from "./js/firebase.js";
-    import {
-      signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-    const logoutBtn = document.getElementById("logoutBtn");
-
-    logoutBtn.addEventListener("click", async (e) => {
-      e.preventDefault();
-      await signOut(auth);
-      window.location.href = "login.html";
-    });
-  </script>
 
 </body>
 </html>
