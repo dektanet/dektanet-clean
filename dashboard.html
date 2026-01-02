@@ -11,43 +11,47 @@
 
 <body>
 
-<header>
-  <h2>DEKTANET</h2>
-  <nav>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="box.html">Box</a>
-    <a href="tasks.html">Tasks</a>
-    <a href="games.html">Games</a>
-    <a href="referral.html">Referral</a>
-    <a href="withdraw.html">Withdraw</a>
-    <a href="login.html">Logout</a>
-  </nav>
-</header>
+  <!-- HEADER -->
+  <header>
+    <h2>DEKTANET</h2>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="tasks.html">Tasks</a>
+      <a href="games.html">Games</a>
+      <a href="referral.html">Referral</a>
+      <a href="withdraw.html">Withdraw</a>
+      <a href="login.html">Logout</a>
+    </nav>
+  </header>
 
-<main>
-  <h3>Welcome to DEKTANET</h3>
+  <!-- MAIN -->
+  <main>
+    <h3>Welcome to DEKTANET</h3>
 
-  <div class="card">
-    <h4>DEKTA-BOX</h4>
+    <!-- ================= DEKTA BOX ================= -->
+    <div class="card">
+      <h4>DEKTA-BOX</h4>
 
-    <p>
-      Status :
-      <b id="boxStatus">LOADING...</b>
-    </p>
+      <p>
+        Status :
+        <b id="boxStatus">INACTIVE</b>
+      </p>
 
-    <button id="activateBoxBtn">
-      Activate Box
-    </button>
+      <button id="activateBoxBtn">
+        Activate Box
+      </button>
 
-    <p id="boxInfo" style="margin-top:10px;font-size:14px;opacity:.8">
-      First time: 30 DEKTA – Renew: 10 DEKTA
-    </p>
-  </div>
-</main>
+      <p style="margin-top:10px; font-size:14px; opacity:0.8;">
+        First time: 30 DEKTA – Renew: 10 DEKTA
+      </p>
+    </div>
+    <!-- ============================================= -->
 
-<!-- JS -->
-<script type="module" src="js/firebase.js"></script>
-<script type="module" src="js/box.js"></script>
+  </main>
+
+  <!-- SCRIPTS (ما تبدل شي) -->
+  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="js/box.js"></script>
 
 </body>
 </html>
