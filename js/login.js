@@ -1,23 +1,33 @@
-// ================================
-// LOGIN MODULE
-// ================================
-
 import { auth } from "./firebase.js";
 import {
-  signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  signInWithEmailAndPassword,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-console.log("✅ login.js loaded");
+const form = document.querySelector("form");
 
-export async function loginUser(email, password) {
-  try {
-    const cred = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    return cred.user;
-  } catch (err) {
-    throw new Error(err.message);
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  if (!email || !password) {
+    alert("Fill all fields");
+    return;
   }
-}
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location.href = "dashboard.html";
+  } catch (err) {
+    alert(err.message);
+  }
+});
+
+/* 🔐 Guard */
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    window.location.href = "dashboard.html";
+  }
+});
