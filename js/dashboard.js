@@ -1,55 +1,51 @@
-// ===============================
-// DASHBOARD MODULE (CLEAN)
-// ===============================
-
 import { auth, db } from "./firebase.js";
 import {
   doc,
-  getDoc
+  getDoc,
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// DOM
 const dektaEl = document.getElementById("dektaBalance");
 const babyDektaEl = document.getElementById("babyDektaBalance");
 const boxStatusEl = document.getElementById("boxStatus");
+const boxExpireText = document.getElementById("boxExpireText");
+const boxExpiresAtEl = document.getElementById("boxExpiresAt");
+const activateBtn = document.getElementById("activateBoxBtn");
 
-// ===============================
-// LOAD DASHBOARD DATA
-// ===============================
-auth.onAuthStateChanged(async (user) => {
+auth.onAuthStateChanged(user => {
   if (!user) {
-    // موش مسجل
     window.location.href = "login.html";
     return;
   }
 
-  try {
-    const ref = doc(db, "users", user.uid);
-    const snap = await getDoc(ref);
+  const ref = doc(db, "users", user.uid);
 
-    if (!snap.exists()) {
-      alert("User not found in Firestore");
-      return;
-    }
+  // LIVE LISTENER
+  onSnapshot(ref, snap => {
+    if (!snap.exists()) return;
 
     const data = snap.data();
 
     // BALANCES
-    if (dektaEl) {
-      dektaEl.textContent = data.dekta ?? 0;
-    }
-
-    if (babyDektaEl) {
-      babyDektaEl.textContent = data.babyDekta ?? 0;
-    }
+    dektaEl.textContent = data.dekta ?? 0;
+    babyDektaEl.textContent = data.babyDekta ?? 0;
 
     // BOX STATUS
-    if (boxStatusEl) {
-      boxStatusEl.textContent = data.boxActive ? "ACTIVE" : "INACTIVE";
-    }
+    if (data.boxActive === true) {
+      boxStatusEl.textContent = "ACTIVE";
+      boxStatusEl.style.color = "lime";
+      activateBtn.style.display = "none";
 
-  } catch (err) {
-    console.error(err);
-    alert("Dashboard load error");
-  }
+      if (data.boxExpiresAt) {
+        const date = data.boxExpiresAt.toDate();
+        boxExpireText.style.display = "block";
+        boxExpiresAtEl.textContent = date.toLocaleString();
+      }
+    } else {
+      boxStatusEl.textContent = "INACTIVE";
+      boxStatusEl.style.color = "red";
+      activateBtn.style.display = "inline-block";
+      boxExpireText.style.display = "none";
+    }
+  });
 });
