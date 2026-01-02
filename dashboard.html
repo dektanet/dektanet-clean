@@ -2,65 +2,152 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>DEKTANET Dashboard</title>
+  <title>Dashboard - DEKTANET</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b0f1a;
+      color: #fff;
+    }
+
+    .topbar {
+      background: #11162a;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .topbar .logo {
+      font-weight: bold;
+      color: #a29bfe;
+    }
+
+    .topbar .actions button {
+      margin-left: 10px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    .btn-withdraw { background: #00b894; }
+    .btn-deposit { background: #0984e3; }
+    .btn-logout { background: #d63031; }
+
+    .container {
+      padding: 20px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+    }
+
+    .card {
+      background: #11162a;
+      border-radius: 12px;
+      padding: 15px;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #f1c40f;
+    }
+
+    .box {
+      border: 2px dashed #6c5ce7;
+      text-align: center;
+    }
+
+    .box button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      background: #6c5ce7;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .nav {
+      margin-top: 25px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      background: #1f2540;
+      padding: 10px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #fff;
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- ================= TOP BAR ================= -->
-<header class="topbar">
-  <div class="logo">DEKTANET</div>
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="logo">DEKTANET</div>
 
-  <div class="balances">
-    <div class="bal purple">DEKTABOX EARN $<span id="boxEarn">30</span></div>
-    <div class="bal yellow">DEKTA $<span id="dekta">0</span></div>
-    <div class="bal gray">BABYDEKTA $<span id="baby">0</span></div>
-  </div>
-
-  <div class="actions">
-    <button class="btn blue">Deposit</button>
-    <button class="btn green">Withdraw</button>
-    <button class="btn red" id="logoutBtn">Logout</button>
-  </div>
-</header>
-
-<!-- ================= NAV ================= -->
-<nav class="nav">
-  <a href="dashboard.html" class="active">Dashboard</a>
-  <a href="#">Box</a>
-  <a href="#">Tasks</a>
-  <a href="#">Games</a>
-  <a href="#">Referral</a>
-  <a href="#">Chat</a>
-</nav>
-
-<!-- ================= CONTENT ================= -->
-<main class="container">
-  <h2>Welcome to DEKTANET</h2>
-
-  <div class="cards">
-    <div class="card">
-      <h3>DEKTA-BOX</h3>
-      <p>Status: <b>INACTIVE</b></p>
-      <button class="btn purple">Activate Key $30</button>
-    </div>
-
-    <div class="card">
-      <h3>Earn with Tasks</h3>
-      <p>Earn 0.02 BABYDEKTA per task</p>
-      <button class="btn yellow">Start Tasks</button>
-    </div>
-
-    <div class="card">
-      <h3>Play to Win</h3>
-      <p>Skill games & rewards</p>
-      <button class="btn purple">Play</button>
+    <div class="actions">
+      <button class="btn-deposit">Deposit</button>
+      <button class="btn-withdraw">Withdraw</button>
+      <button class="btn-logout" id="logoutBtn">Logout</button>
     </div>
   </div>
-</main>
 
-<script type="module" src="js/dashboard.js"></script>
+  <!-- CONTENT -->
+  <div class="container">
+
+    <div class="cards">
+
+      <div class="card">
+        <h3>DEKTA $</h3>
+        <p id="dekta">0</p>
+      </div>
+
+      <div class="card">
+        <h3>BABYDEKTA $</h3>
+        <p id="baby">0</p>
+      </div>
+
+      <div class="card">
+        <h3>DEKTABOX EARN $</h3>
+        <p id="boxEarn">30</p>
+      </div>
+
+      <div class="card box">
+        <h3>DEKTA-BOX</h3>
+        <p>Status: <b id="boxStatus">INACTIVE</b></p>
+        <button id="activateBoxBtn">Activate Box (30$)</button>
+      </div>
+
+    </div>
+
+    <!-- NAV -->
+    <div class="nav">
+      <a href="tasks.html">Earn with Tasks</a>
+      <a href="create-task.html">Create Task</a>
+      <a href="referral.html">Referral</a>
+      <a href="games.html">Play to Win</a>
+      <a href="chat.html">Chat Team</a>
+    </div>
+
+  </div>
+
+  <!-- JS -->
+  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="js/dashboard.js"></script>
+
 </body>
 </html>
