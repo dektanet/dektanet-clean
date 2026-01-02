@@ -1,33 +1,35 @@
+// ==============================
+// LOGIN MODULE (CLEAN)
+// ==============================
+
 import { auth } from "./firebase.js";
 import {
-  signInWithEmailAndPassword,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-const form = document.querySelector("form");
+console.log("✅ login.js loaded");
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+const btn = document.getElementById("loginBtn");
 
+btn.addEventListener("click", async () => {
   const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
+  const password = document.getElementById("password").value.trim();
 
   if (!email || !password) {
-    alert("Fill all fields");
+    alert("❌ Email & password required");
     return;
   }
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    window.location.href = "dashboard.html";
-  } catch (err) {
-    alert(err.message);
-  }
-});
 
-/* 🔐 Guard */
-onAuthStateChanged(auth, (user) => {
-  if (user) {
+    alert("✅ Login successful");
+
+    // Redirect to dashboard
     window.location.href = "dashboard.html";
+
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
   }
 });
