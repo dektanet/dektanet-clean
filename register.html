@@ -2,27 +2,109 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Register | DEKTANET</title>
+  <title>Register – DEKTANET</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Style (تنجم تبدلو لاحقاً) -->
+  <style>
+    body {
+      background: #0b0f1a;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background: #11162a;
+      padding: 25px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 0 20px rgba(0,0,0,.4);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #6a5cff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .login-link {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .login-link a {
+      color: #6a5cff;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
 
-  <h2>Create Account</h2>
+  <div class="card">
+    <h2>Create Account</h2>
 
-  <form id="registerForm">
-    <input type="email" id="email" placeholder="Email" required /><br><br>
-    <input type="password" id="password" placeholder="Password" required /><br><br>
-    <input type="text" id="referral" placeholder="Referral code (optional)" /><br><br>
+    <input
+      type="email"
+      id="email"
+      placeholder="Email"
+      autocomplete="email"
+    />
 
-    <button type="submit">Register</button>
-  </form>
+    <input
+      type="password"
+      id="password"
+      placeholder="Password"
+      autocomplete="new-password"
+    />
 
-  <p>
-    Already have an account?
-    <a href="login.html">Login</a>
-  </p>
+    <input
+      type="text"
+      id="referral"
+      placeholder="Referral code (optional)"
+    />
 
-  <!-- IMPORTANT -->
-  <script type="module" src="./js/register.js"></script>
+    <button id="registerBtn">
+      Create Account
+    </button>
+
+    <div class="login-link">
+      Already have an account?
+      <a href="login.html">Login</a>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script type="module" src="js/register.js"></script>
+
 </body>
 </html>
