@@ -7,108 +7,47 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/style.css" />
-
-  <style>
-    body {
-      background: #0b0f1a;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      margin: 0;
-    }
-
-    header {
-      background: #11162a;
-      padding: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    nav a {
-      color: #bbb;
-      margin-right: 15px;
-      text-decoration: none;
-    }
-
-    nav a:hover {
-      color: #fff;
-    }
-
-    main {
-      padding: 20px;
-    }
-
-    .card {
-      background: #151b33;
-      border-radius: 10px;
-      padding: 20px;
-      max-width: 400px;
-    }
-
-    button {
-      background: #7c5cff;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 8px;
-      color: #fff;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    button:hover {
-      opacity: 0.9;
-    }
-
-    .muted {
-      opacity: 0.7;
-      font-size: 14px;
-      margin-top: 10px;
-    }
-  </style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <h2>DEKTANET</h2>
-    <nav>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="box.html">Box</a>
-      <a href="tasks.html">Tasks</a>
-      <a href="games.html">Games</a>
-      <a href="referral.html">Referral</a>
-      <a href="withdraw.html">Withdraw</a>
-      <a href="login.html">Logout</a>
-    </nav>
-  </header>
+<header>
+  <h2>DEKTANET</h2>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="box.html">Box</a>
+    <a href="tasks.html">Tasks</a>
+    <a href="games.html">Games</a>
+    <a href="referral.html">Referral</a>
+    <a href="withdraw.html">Withdraw</a>
+    <a href="login.html">Logout</a>
+  </nav>
+</header>
 
-  <!-- MAIN -->
-  <main>
-    <h3>Welcome to DEKTANET</h3>
+<main>
+  <h3>Welcome to DEKTANET</h3>
 
-    <!-- DEKTA BOX CARD -->
-    <div class="card">
-      <h4>DEKTA-BOX</h4>
+  <div class="card">
+    <h4>DEKTA-BOX</h4>
 
-      <p>
-        Status :
-        <b id="boxStatus">INACTIVE</b>
-      </p>
+    <p>
+      Status :
+      <b id="boxStatus">LOADING...</b>
+    </p>
 
-      <button id="activateBoxBtn">
-        Activate Box (30 DEKTA)
-      </button>
+    <button id="activateBoxBtn">
+      Activate Box
+    </button>
 
-      <p class="muted">
-        First time: 30 DEKTA – Renew: 10 DEKTA
-      </p>
-    </div>
-  </main>
+    <p id="boxInfo" style="margin-top:10px;font-size:14px;opacity:.8">
+      First time: 30 DEKTA – Renew: 10 DEKTA
+    </p>
+  </div>
+</main>
 
-  <!-- SCRIPTS -->
-  <script type="module" src="js/firebase.js"></script>
-  <script type="module" src="js/box.js"></script>
+<!-- JS -->
+<script type="module" src="js/firebase.js"></script>
+<script type="module" src="js/box.js"></script>
 
 </body>
 </html>
