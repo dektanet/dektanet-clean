@@ -1,44 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard - DEKTANET</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/style.css">
-</head>
+  <meta charset="UTF-8" />
+  <title>Dashboard – DEKTANET</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
 <body>
 
-<header>
-  <h2>DEKTANET</h2>
-  <nav>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="tasks.html">Tasks</a>
-    <a href="games.html">Games</a>
-    <a href="referral.html">Referral</a>
-    <a href="withdraw.html">Withdraw</a>
-    <a href="login.html">Logout</a>
-  </nav>
-</header>
+  <!-- HEADER -->
+  <header>
+    <h2>DEKTANET</h2>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="tasks.html">Tasks</a>
+      <a href="games.html">Games</a>
+      <a href="referral.html">Referral</a>
+      <a href="withdraw.html">Withdraw</a>
+      <a href="login.html">Logout</a>
+    </nav>
+  </header>
 
-<main>
-  <h3>Welcome to DEKTANET</h3>
+  <!-- MAIN -->
+  <main>
+    <h3>Welcome to DEKTANET</h3>
 
-  <div class="card">
-    <h4>DEKTA-BOX</h4>
+    <!-- BALANCES -->
+    <div class="card">
+      <p>DEKTA: <b id="dektaBalance">0</b></p>
+      <p>BABYDEKTA: <b id="babyDektaBalance">0</b></p>
+    </div>
 
-    <p>Status : <b id="boxStatus">INACTIVE</b></p>
+    <!-- BOX CARD -->
+    <div class="card">
+      <h4>DEKTA-BOX</h4>
 
-    <button id="activateBoxBtn">Activate Box</button>
+      <p>
+        Status:
+        <b id="boxStatus">INACTIVE</b>
+      </p>
 
-    <p style="font-size:14px;opacity:.7;margin-top:10px">
-      First time: 30 DEKTA – Renew: 10 DEKTA
-    </p>
-  </div>
-</main>
+      <p id="boxExpireText" style="display:none;">
+        Expires at:
+        <span id="boxExpiresAt"></span>
+      </p>
 
-<script type="module" src="js/firebase.js"></script>
-<script type="module" src="js/box.js"></script>
+      <button id="activateBoxBtn">
+        Activate Box
+      </button>
+
+      <p style="font-size:13px;opacity:0.7;">
+        First time: 30 DEKTA – Renew: 10 DEKTA
+      </p>
+    </div>
+  </main>
+
+  <!-- SCRIPTS (مهم) -->
+  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="js/dashboard.js"></script>
+  <script type="module" src="js/box.js"></script>
 
 </body>
 </html>
