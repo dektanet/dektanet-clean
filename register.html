@@ -2,24 +2,67 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Register - DEKTANET</title>
+  <title>Create Account – DEKTANET</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- (اختياري) CSS -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .card {
+      background: #1c1c1c;
+      padding: 20px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 350px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #7c3aed;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+  </style>
 </head>
+
 <body>
 
-  <h2>Create Account</h2>
+  <div class="card">
+    <h2>Create Account</h2>
 
-  <input id="email" type="email" placeholder="Email" /><br><br>
-  <input id="password" type="password" placeholder="Password" /><br><br>
+    <!-- لازم هاذم بالضبط -->
+    <input id="email" type="email" placeholder="Email" />
+    <input id="password" type="password" placeholder="Password" />
 
-  <button id="registerBtn">Register</button>
+    <button id="registerBtn">Register</button>
+  </div>
 
-  <p>
-    Already have account?
-    <a href="login.html">Login</a>
-  </p>
-
-  <!-- SCRIPTS -->
+  <!-- ⚠️ هذا فقط -->
   <script type="module" src="js/register.js"></script>
 
 </body>
