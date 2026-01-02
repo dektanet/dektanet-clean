@@ -2,58 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>DEKTANET | BOX</title>
+  <title>DEKTANET | Box</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <style>
-    body {
-      background:#0b0f1a;
-      color:#fff;
-      font-family: Arial, sans-serif;
-      padding:20px;
-    }
-    .box {
-      background:#12172a;
-      border-radius:10px;
-      padding:20px;
-      max-width:400px;
-      margin:auto;
-    }
-    button {
-      width:100%;
-      padding:12px;
-      margin-top:10px;
-      border:none;
-      border-radius:6px;
-      font-size:16px;
-      cursor:pointer;
-    }
-    .activate { background:#7c4dff; color:#fff; }
-    .renew { background:#ff9800; color:#000; }
-    .disabled { opacity:0.5; cursor:not-allowed; }
-    .status { margin:10px 0; font-weight:bold; }
-  </style>
-</head>
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css" />
 
+  <!-- Firebase + Modules -->
+  <script type="module" src="js/box.js" defer></script>
+</head>
 <body>
 
-  <h2>📦 DEKTABOX</h2>
+  <!-- HEADER -->
+  <div id="header"></div>
 
-  <div class="box">
-    <p>Status: <span id="boxStatus">---</span></p>
-    <p>Countdown: <span id="countdown">---</span></p>
+  <main class="container">
+    <h2>📦 My Box</h2>
 
-    <button id="activateBtn" class="activate">
-      Activate Box (First Time)
-    </button>
+    <div class="card">
+      <p><strong>Status:</strong> <span id="boxStatus">---</span></p>
+      <p><strong>Expires in:</strong> <span id="countdown">---</span></p>
 
-    <button id="renewBtn" class="renew">
-      Renew Key (10$)
-    </button>
-  </div>
-
-  <script type="module" src="js/firebase.js"></script>
-  <script type="module" src="js/box.js"></script>
+      <button id="activateBoxBtn">Activate Box (30 DEKTABOX)</button>
+      <button id="renewBoxBtn">Renew Key (10$)</button>
+    </div>
+  </main>
 
 </body>
 </html>
