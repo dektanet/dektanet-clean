@@ -1,83 +1,103 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
+* {
   margin: 0;
-  padding-top: 70px; /* space for fixed header */
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
-/* HEADER */
-.app-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
+body {
+  background: #0b0f1a;
+  color: #fff;
+}
+
+/* TOP BAR */
+.topbar {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  background: #ffffff;
-  border-bottom: 1px solid #ddd;
-  z-index: 1000;
+  align-items: center;
+  padding: 14px 20px;
+  background: #111827;
+  border-bottom: 1px solid #1f2937;
 }
 
 .logo {
   font-weight: bold;
+  color: #a855f7;
   font-size: 18px;
 }
 
-/* NAV LINKS */
-#navLinks a {
-  margin-right: 15px;
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-}
-
-#navLinks a:hover {
-  text-decoration: underline;
-}
-
-/* ACTIONS */
-.actions {
+.balances {
   display: flex;
-  align-items: center;
   gap: 10px;
 }
 
-.actions select,
-.actions button {
+.bal {
   padding: 6px 10px;
-  cursor: pointer;
+  border-radius: 8px;
+  font-size: 13px;
 }
 
-/* PAGE CONTAINER */
-.container {
-  max-width: 400px;
-  margin: 40px auto;
-  text-align: center;
-  background: #fff;
-  padding: 20px;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+.bal span {
+  margin-left: 5px;
+  font-weight: bold;
 }
 
-/* FORMS */
-input,
-button {
-  display: block;
-  width: 100%;
-  margin: 10px 0;
-  padding: 10px;
-  font-size: 14px;
+.purple { background:#7c3aed; }
+.yellow { background:#facc15; color:#000; }
+.gray { background:#374151; }
+
+.actions {
+  display: flex;
+  gap: 8px;
 }
 
-button {
-  background: #222;
-  color: #fff;
+.btn {
+  padding: 8px 12px;
   border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
-button:hover {
-  background: #000;
+.blue { background:#3b82f6; color:#fff; }
+.green { background:#22c55e; color:#000; }
+.red { background:#ef4444; color:#fff; }
+.purple { background:#7c3aed; color:#fff; }
+.yellow { background:#facc15; color:#000; }
+
+/* NAV */
+.nav {
+  display: flex;
+  gap: 15px;
+  padding: 12px 20px;
+  background: #020617;
+}
+
+.nav a {
+  color: #9ca3af;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav a.active,
+.nav a:hover {
+  color: #facc15;
+}
+
+/* CONTENT */
+.container {
+  padding: 20px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.card {
+  background: #111827;
+  padding: 16px;
+  border-radius: 14px;
 }
