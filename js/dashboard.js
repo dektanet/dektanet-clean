@@ -1,51 +1,41 @@
 import { auth, db } from "./firebase.js";
-import {
-  doc,
-  getDoc,
-  onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { onAuthStateChanged } from
+  "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+import { doc, getDoc, updateDoc, Timestamp } from
+  "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-const dektaEl = document.getElementById("dektaBalance");
-const babyDektaEl = document.getElementById("babyDektaBalance");
-const boxStatusEl = document.getElementById("boxStatus");
-const boxExpireText = document.getElementById("boxExpireText");
-const boxExpiresAtEl = document.getElementById("boxExpiresAt");
-const activateBtn = document.getElementById("activateBoxBtn");
+const statusEl = document.getElementById("boxStatus");
+const btn = document.getElementById("activateBoxBtn");
 
-auth.onAuthStateChanged(user => {
+onAuthStateChanged(auth, async (user) => {
   if (!user) {
     window.location.href = "login.html";
     return;
   }
 
   const ref = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
+  const data = snap.data();
 
-  // LIVE LISTENER
-  onSnapshot(ref, snap => {
-    if (!snap.exists()) return;
+  statusEl.innerText = data.boxActive ? "ACTIVE" : "INACTIVE";
 
-    const data = snap.data();
-
-    // BALANCES
-    dektaEl.textContent = data.dekta ?? 0;
-    babyDektaEl.textContent = data.babyDekta ?? 0;
-
-    // BOX STATUS
-    if (data.boxActive === true) {
-      boxStatusEl.textContent = "ACTIVE";
-      boxStatusEl.style.color = "lime";
-      activateBtn.style.display = "none";
-
-      if (data.boxExpiresAt) {
-        const date = data.boxExpiresAt.toDate();
-        boxExpireText.style.display = "block";
-        boxExpiresAtEl.textContent = date.toLocaleString();
-      }
-    } else {
-      boxStatusEl.textContent = "INACTIVE";
-      boxStatusEl.style.color = "red";
-      activateBtn.style.display = "inline-block";
-      boxExpireText.style.display = "none";
+  btn.onclick = async () => {
+    if (data.dekta < 30) {
+      alert("Not enough DEKTA");
+      return;
     }
-  });
+
+    const expires = new Date();
+    expires.setDate(expires.getDate() + 30);
+
+    await updateDoc(ref, {
+      dekta: data.dekta - 30,
+      boxActive: true,
+      boxEverActivated: true,
+      boxExpiresAt: Timestamp.fromDate(expires)
+    });
+
+    alert("Box Activated ✅");
+    location.reload();
+  };
 });
