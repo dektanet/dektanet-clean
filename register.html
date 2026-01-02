@@ -1,19 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Register</title>
+  <title>Register | DEKTANET</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
-<h2>Create Account</h2>
+<h2>Register</h2>
 
-<input id="email" type="email" placeholder="Email"><br>
-<input id="password" type="password" placeholder="Password"><br>
-<button id="registerBtn">Register</button>
+<input id="email" type="email" placeholder="Email"><br><br>
+<input id="password" type="password" placeholder="Password"><br><br>
+<button id="registerBtn">Create account</button>
 
-<p>Already have account? <a href="login.html">Login</a></p>
+<p id="msg"></p>
 
-<script type="module" src="js/register.js"></script>
+<script type="module">
+  import { auth, db } from "./js/firebase.js";
+  import { createUserWithEmailAndPassword } 
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { doc, setDoc, serverTimestamp } 
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  document.getElementById("registerBtn").onclick = async () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const msg = document.getElementById("msg");
+
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+
+      await setDoc(doc(db, "users", cred.user.uid), {
+        email: email,
+        createdAt: serverTimestamp(),
+        dekta: 0,
+        babydekta: 0,
+        dektabox: 30
+      });
+
+      window.location.href = "login.html";
+    } catch (e) {
+      msg.innerText = e.message;
+    }
+  };
+</script>
+
 </body>
 </html>
