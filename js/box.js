@@ -71,3 +71,28 @@ async function activateBox() {
 
   if ((data.dekta || 0) < cost) {
     alert("❌ Not enough DEKTA");
+    return;
+  }
+
+  await updateDoc(ref, {
+    dekta: (data.dekta || 0) - cost,
+    boxActive: true,
+    boxEverActivated: true,
+    boxExpiresAt: addDays(BOX_DAYS),
+    updatedAt: serverTimestamp()
+  });
+
+  alert("✅ DEKTA-BOX Activated");
+  location.reload();
+}
+
+// EVENTS
+if (btn) {
+  btn.addEventListener("click", activateBox);
+}
+
+// AUTH LISTENER
+auth.onAuthStateChanged((user) => {
+  if (!user) return;
+  loadBoxStatus(user);
+});
