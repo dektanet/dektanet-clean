@@ -1,15 +1,37 @@
+// ===============================
+// BOX MODULE - DEKTANET CLEAN
+// ===============================
+
 import { auth, db } from "./firebase.js";
 import {
-  doc, getDoc, updateDoc, increment, Timestamp
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  doc,
+  getDoc,
+  updateDoc,
+  increment,
+  serverTimestamp,
+  Timestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import { rewardReferral } from "./referralReward.js";
+// DOM
+const statusEl = document.getElementById("boxStatus");
+const countdownEl = document.getElementById("countdown");
+const activateBtn = document.getElementById("activateBoxBtn");
+const renewBtn = document.getElementById("renewBoxBtn");
 
-const activateBtn = document.getElementById("activateBtn");
-const renewBtn = document.getElementById("renewBtn");
+// Utils
+function daysBetween(ts) {
+  const now = new Date();
+  const end = ts.toDate();
+  const diff = end - now;
+  return Math.max(Math.ceil(diff / (1000 * 60 * 60 * 24)), 0);
+}
 
-auth.onAuthStateChanged(async user => {
-  if (!user) return location.href = "login.html";
+// Load box
+auth.onAuthStateChanged(async (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
 
   const ref = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
@@ -17,47 +39,85 @@ auth.onAuthStateChanged(async user => {
 
   const data = snap.data();
 
-  /* FIRST ACTIVATE (FREE) */
-  activateBtn?.addEventListener("click", async () => {
-    if (data.box?.activatedOnce) return;
-
-    const expires = Timestamp.fromMillis(
-      Date.now() + 30 * 24 * 60 * 60 * 1000
-    );
-
-    await updateDoc(ref, {
-      "box.status": "active",
-      "box.expiresAt": expires,
-      "box.activatedOnce": true
-    });
-
-    // مثال صندوق 130
-    await rewardReferral(user.uid, 50, 10);
-
-    alert("BOX ACTIVATED (FREE MONTH)");
-    location.reload();
-  });
-
-  /* RENEW KEY 10$ */
-  renewBtn?.addEventListener("click", async () => {
-    if ((data.balances?.dekta || 0) < 10) {
-      alert("Not enough balance");
-      return;
+  // STATUS
+  if (data.boxActive && data.boxExpiresAt) {
+    const days = daysBetween(data.boxExpiresAt);
+    if (days > 0) {
+      statusEl.textContent = "ACTIVE";
+      countdownEl.textContent = days + " days";
+    } else {
+      statusEl.textContent = "CLOSED";
+      countdownEl.textContent = "Expired";
     }
+  } else {
+    statusEl.textContent = "INACTIVE";
+    countdownEl.textContent = "-";
+  }
+});
 
-    const expires = Timestamp.fromMillis(
-      Date.now() + 30 * 24 * 60 * 60 * 1000
-    );
+// ===============================
+// ACTIVATE BOX (FIRST TIME)
+// ===============================
+activateBtn.addEventListener("click", async () => {
+  const user = auth.currentUser;
+  if (!user) return;
 
-    await updateDoc(ref, {
-      "balances.dekta": increment(-10),
-      "box.status": "active",
-      "box.expiresAt": expires
-    });
+  const ref = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
+  const data = snap.data();
 
-    await rewardReferral(user.uid, 4, 0.5);
+  if (data.boxActive) {
+    alert("❌ Box already active");
+    return;
+  }
 
-    alert("BOX RENEWED");
-    location.reload();
+  if ((data.dektaboxEarn || 0) < 30) {
+    alert("❌ Not enough DEKTABOX");
+    return;
+  }
+
+  const expires = Timestamp.fromDate(
+    new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+  );
+
+  await updateDoc(ref, {
+    dektaboxEarn: increment(-30),
+    boxActive: true,
+    boxExpiresAt: expires,
+    boxActivatedAt: serverTimestamp()
   });
+
+  alert("✅ Box activated (30 days)");
+  location.reload();
+});
+
+// ===============================
+// RENEW BOX (10$ KEY)
+// ===============================
+renewBtn.addEventListener("click", async () => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const ref = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
+  const data = snap.data();
+
+  if ((data.dekta || 0) < 10) {
+    alert("❌ Not enough DEKTA (10$ required)");
+    return;
+  }
+
+  const expires = Timestamp.fromDate(
+    new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+  );
+
+  await updateDoc(ref, {
+    dekta: increment(-10),
+    boxActive: true,
+    boxExpiresAt: expires,
+    lastRenewAt: serverTimestamp()
+  });
+
+  alert("🔁 Box renewed (30 days)");
+  location.reload();
 });
