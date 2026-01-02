@@ -23,29 +23,37 @@ auth.onAuthStateChanged(async (user) => {
 
   const data = snap.data();
 
-  // عرض الحالة
-  if (data.boxActive) {
+  // 🔐 لو البوكس مفعّل
+  if (data.boxActive === true) {
     statusEl.innerText = "ACTIVE";
     btn.disabled = true;
     btn.innerText = "BOX ACTIVE";
-  } else {
-    statusEl.innerText = "INACTIVE";
+    return;
   }
 
+  // ❌ غير مفعّل
+  statusEl.innerText = "INACTIVE";
+  btn.disabled = false;
+  btn.innerText = "Activate Box";
+
   btn.onclick = async () => {
+    // حماية إضافية
+    if (data.boxActive === true) {
+      alert("❌ Box already active");
+      return;
+    }
+
     const price = data.boxEverActivated ? RENEW_PRICE : FIRST_PRICE;
 
-    // ❌ ما عندوش رصيد
+    // 💸 رصيد غير كافي
     if (data.dekta < price) {
       alert(`❌ رصيدك غير كافي (يلزمك ${price} DEKTA)`);
       return;
     }
 
-    // ✅ حساب تاريخ الانتهاء
     const expires = new Date();
     expires.setDate(expires.getDate() + BOX_DURATION_DAYS);
 
-    // ✅ تحديث Firestore
     await updateDoc(ref, {
       dekta: data.dekta - price,
       boxActive: true,
