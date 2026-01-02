@@ -1,46 +1,26 @@
 import { db } from "./firebase.js";
 import {
-  doc,
-  getDoc,
-  Timestamp
+  doc, getDoc, updateDoc, increment, Timestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-export async function checkPenalty(userId) {
+export async function applyPenalty(userId) {
   const ref = doc(db, "users", userId);
   const snap = await getDoc(ref);
-
-  if (!snap.exists()) {
-    return { ok: false };
-  }
+  if (!snap.exists()) return;
 
   const data = snap.data();
-
-  // إذا الصندوق ACTIVE → مافماش penalty
-  if (data.box?.status === "active") {
-    return { ok: true, penalty: 0 };
-  }
-
-  // إذا ما عندوش expiresAt
-  if (!data.box?.expiresAt) {
-    return { ok: false };
-  }
+  if (data.box?.status === "active") return;
 
   const now = Timestamp.now();
+  if (data.box.expiresAt.toMillis() > now.toMillis()) return;
 
-  // إذا مازال الوقت ما وفاش
-  if (data.box.expiresAt.toMillis() > now.toMillis()) {
-    return { ok: true, penalty: 0 };
-  }
+  const total =
+    (data.balances.dekta || 0) +
+    (data.balances.babydekta || 0);
 
-  // 🔴 Penalty 30%
-  const dekt = data.balances?.dekta || 0;
-  const baby = data.balances?.babydekta || 0;
-
-  const total = dekt + baby;
   const penalty = total * 0.3;
 
-  return {
-    ok: false,
-    penalty: penalty
-  };
+  await updateDoc(ref, {
+    "balances.dekta": increment(-penalty)
+  });
 }
