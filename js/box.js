@@ -1,59 +1,86 @@
-// ===============================
-// BOX MODULE (ACTIVATE)
-// ===============================
-
 import { auth, db } from "./firebase.js";
 import {
   doc,
   getDoc,
   updateDoc,
-  Timestamp
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const activateBtn = document.getElementById("activateBoxBtn");
-const boxStatusEl = document.getElementById("boxStatus");
+const statusEl = document.getElementById("boxStatus");
+const btn = document.getElementById("activateBoxBtn");
 
-if (activateBtn) {
-  activateBtn.addEventListener("click", async () => {
-    const user = auth.currentUser;
-    if (!user) {
-      alert("Not logged in");
-      return;
-    }
+auth.onAuthStateChanged(async (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
 
-    const ref = doc(db, "users", user.uid);
-    const snap = await getDoc(ref);
+  const userRef = doc(db, "users", user.uid);
+  const snap = await getDoc(userRef);
 
-    if (!snap.exists()) {
-      alert("User not found");
-      return;
-    }
+  if (!snap.exists()) {
+    alert("User not found in Firestore");
+    return;
+  }
 
-    const data = snap.data();
+  const data = snap.data();
+  renderBox(data);
 
-    if (data.boxActive === true) {
-      alert("Box already active");
-      return;
-    }
+  btn.onclick = async () => {
+    await handleBox(userRef, data);
+  };
+});
 
-    if ((data.dekta ?? 0) < 30) {
+function renderBox(data) {
+  if (data.boxActive === true) {
+    statusEl.textContent = "ACTIVE";
+    btn.textContent = "Renew Box (10 DEKTA)";
+  } else {
+    statusEl.textContent = "INACTIVE";
+    btn.textContent = "Activate Box (30 DEKTA)";
+  }
+}
+
+async function handleBox(userRef, data) {
+  // FIRST ACTIVATION
+  if (data.boxEverActivated !== true) {
+    if (data.dekta < 30) {
       alert("Not enough DEKTA");
       return;
     }
 
-    // حساب تاريخ الانتهاء (30 يوم)
-    const expires = Timestamp.fromMillis(
-      Date.now() + 30 * 24 * 60 * 60 * 1000
-    );
-
-    await updateDoc(ref, {
+    await updateDoc(userRef, {
       dekta: data.dekta - 30,
       boxActive: true,
       boxEverActivated: true,
-      boxExpiresAt: expires
+      boxExpiresAt: addDays(30),
+      updatedAt: serverTimestamp()
     });
 
-    alert("DEKTA-BOX Activated ✅");
+    alert("Box Activated ✅");
     location.reload();
+    return;
+  }
+
+  // RENEW
+  if (data.dekta < 10) {
+    alert("Not enough DEKTA to renew");
+    return;
+  }
+
+  await updateDoc(userRef, {
+    dekta: data.dekta - 10,
+    boxActive: true,
+    boxExpiresAt: addDays(30),
+    updatedAt: serverTimestamp()
   });
+
+  alert("Box Renewed 🔁");
+  location.reload();
+}
+
+function addDays(days) {
+  const now = new Date();
+  now.setDate(now.getDate() + days);
+  return now;
 }
