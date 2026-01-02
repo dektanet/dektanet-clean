@@ -1,10 +1,8 @@
 import { auth, db } from "./firebase.js";
-import { createUserWithEmailAndPassword } from
-  "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-import { doc, setDoc, serverTimestamp } from
-  "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-document.getElementById("registerBtn").addEventListener("click", async () => {
+document.getElementById("registerBtn").onclick = async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
@@ -26,4 +24,4 @@ document.getElementById("registerBtn").addEventListener("click", async () => {
   } catch (e) {
     alert(e.message);
   }
-});
+};
