@@ -1,102 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Login - DEKTANET</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0b0f1a;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-
-    .card {
-      background: #11162a;
-      padding: 25px;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 360px;
-      box-shadow: 0 0 25px rgba(0,0,0,0.4);
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 12px;
-      border-radius: 6px;
-      border: none;
-      outline: none;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #00b894;
-      border: none;
-      border-radius: 6px;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      opacity: 0.9;
-    }
-
-    .link {
-      margin-top: 15px;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    .link a {
-      color: #6c5ce7;
-      text-decoration: none;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Login</title>
 </head>
 <body>
 
-  <div class="card">
-    <h2>Login</h2>
+<h2>Login</h2>
 
-    <input
-      type="email"
-      id="email"
-      placeholder="Email"
-      required
-    />
+<input id="email" type="email" placeholder="Email"><br><br>
+<input id="password" type="password" placeholder="Password"><br><br>
 
-    <input
-      type="password"
-      id="password"
-      placeholder="Password"
-      required
-    />
+<button id="loginBtn">Login</button>
 
-    <button id="loginBtn">Login</button>
-
-    <div class="link">
-      No account?
-      <a href="register.html">Create one</a>
-    </div>
-  </div>
-
-  <!-- JS -->
-  <script type="module" src="js/firebase.js"></script>
-  <script type="module" src="js/login.js"></script>
-
+<script type="module" src="js/login.js"></script>
 </body>
 </html>
