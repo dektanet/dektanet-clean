@@ -1,22 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Register</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Register | DEKTANET</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-<h2>Register</h2>
+  <div class="container">
+    <h1>Create Account</h1>
+    <p>Register with email or phone</p>
 
-<form id="registerForm">
-  <input id="email" type="email" placeholder="Email" required><br><br>
-  <input id="password" type="password" placeholder="Password" required><br><br>
-  <button type="submit">Register</button>
-</form>
+    <!-- EMAIL -->
+    <input
+      type="email"
+      id="email"
+      placeholder="Email address"
+      required
+    />
 
-<script type="module" src="js/firebase.js"></script>
-<script type="module" src="js/register.js"></script>
+    <!-- PHONE (OPTIONAL) -->
+    <input
+      type="text"
+      id="phone"
+      placeholder="Phone number (optional)"
+    />
+
+    <!-- PASSWORD -->
+    <input
+      type="password"
+      id="password"
+      placeholder="Password"
+      required
+    />
+
+    <!-- REFERRAL (AUTO FROM LINK) -->
+    <input
+      type="text"
+      id="referral"
+      placeholder="Referral code (optional)"
+      readonly
+    />
+
+    <!-- REGISTER BUTTON -->
+    <button id="registerBtn" class="btn">
+      Create Account
+    </button>
+
+    <p style="margin-top:15px;">
+      Already have an account?
+      <a href="login.html">Login</a>
+    </p>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script type="module">
+    import { registerUser } from "./js/register.js";
+
+    // 1️⃣ Read referral code from URL (?ref=123456)
+    const params = new URLSearchParams(window.location.search);
+    const refCode = params.get("ref");
+
+    if (refCode) {
+      document.getElementById("referral").value = refCode;
+    }
+
+    // 2️⃣ Register action
+    document.getElementById("registerBtn").onclick = async () => {
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const password = document.getElementById("password").value;
+      const referral = document.getElementById("referral").value || null;
+
+      if (!email || !password) {
+        alert("Please fill email and password");
+        return;
+      }
+
+      try {
+        await registerUser({
+          email,
+          password,
+          phone,
+          referralCode: referral
+        });
+
+        alert("Account created successfully ✅");
+        window.location.href = "login.html";
+
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+  </script>
 
 </body>
 </html>
