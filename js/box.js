@@ -1,125 +1,63 @@
 import { auth, db } from "./firebase.js";
 import {
-  doc,
-  getDoc,
-  updateDoc,
-  increment,
-  Timestamp
+  doc, getDoc, updateDoc, increment, Timestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const statusEl = document.getElementById("boxStatus");
-const countdownEl = document.getElementById("countdown");
+import { rewardReferral } from "./referralReward.js";
+
 const activateBtn = document.getElementById("activateBtn");
 const renewBtn = document.getElementById("renewBtn");
 
-let userRef;
-let userData;
+auth.onAuthStateChanged(async user => {
+  if (!user) return location.href = "login.html";
 
-/* ===================== LOAD USER ===================== */
-auth.onAuthStateChanged(async (user) => {
-  if (!user) {
-    location.href = "login.html";
-    return;
-  }
-
-  userRef = doc(db, "users", user.uid);
-  const snap = await getDoc(userRef);
+  const ref = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
   if (!snap.exists()) return;
 
-  userData = snap.data();
-  renderBox();
-});
+  const data = snap.data();
 
-/* ===================== RENDER ===================== */
-function renderBox() {
-  const box = userData.box || {};
+  /* FIRST ACTIVATE (FREE) */
+  activateBtn?.addEventListener("click", async () => {
+    if (data.box?.activatedOnce) return;
 
-  statusEl.textContent = box.status || "closed";
+    const expires = Timestamp.fromMillis(
+      Date.now() + 30 * 24 * 60 * 60 * 1000
+    );
 
-  if (box.expiresAt) {
-    startCountdown(box.expiresAt.toMillis());
-  } else {
-    countdownEl.textContent = "---";
-  }
+    await updateDoc(ref, {
+      "box.status": "active",
+      "box.expiresAt": expires,
+      "box.activatedOnce": true
+    });
 
-  // first month free
-  if (!box.activatedOnce) {
-    activateBtn.classList.remove("disabled");
-    renewBtn.classList.add("disabled");
-  } else {
-    activateBtn.classList.add("disabled");
-    renewBtn.classList.remove("disabled");
-  }
-}
+    // مثال صندوق 130
+    await rewardReferral(user.uid, 50, 10);
 
-/* ===================== COUNTDOWN ===================== */
-function startCountdown(ms) {
-  setInterval(() => {
-    const diff = ms - Date.now();
-    if (diff <= 0) {
-      countdownEl.textContent = "EXPIRED";
+    alert("BOX ACTIVATED (FREE MONTH)");
+    location.reload();
+  });
+
+  /* RENEW KEY 10$ */
+  renewBtn?.addEventListener("click", async () => {
+    if ((data.balances?.dekta || 0) < 10) {
+      alert("Not enough balance");
       return;
     }
-    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-    countdownEl.textContent = d + " days";
-  }, 1000);
-}
 
-/* ===================== ACTIVATE (FIRST TIME) ===================== */
-activateBtn.onclick = async () => {
-  if (activateBtn.classList.contains("disabled")) return;
+    const expires = Timestamp.fromMillis(
+      Date.now() + 30 * 24 * 60 * 60 * 1000
+    );
 
-  const now = Timestamp.now();
-  const expires = Timestamp.fromMillis(
-    Date.now() + 30 * 24 * 60 * 60 * 1000
-  );
+    await updateDoc(ref, {
+      "balances.dekta": increment(-10),
+      "box.status": "active",
+      "box.expiresAt": expires
+    });
 
-  await updateDoc(userRef, {
-    "box.status": "active",
-    "box.expiresAt": expires,
-    "box.activatedOnce": true
+    await rewardReferral(user.uid, 4, 0.5);
+
+    alert("BOX RENEWED");
+    location.reload();
   });
-
-  // referral reward on first activation (example 130 box)
-  if (userData.referral?.by) {
-    const refRef = doc(db, "users", userData.referral.by);
-    const refSnap = await getDoc(refRef);
-    if (refSnap.exists()) {
-      await updateDoc(refRef, {
-        "balances.dekta": increment(50),
-        "referral.level1": increment(1)
-      });
-    }
-  }
-
-  alert("BOX ACTIVATED (FREE FIRST MONTH)");
-  location.reload();
-};
-
-/* ===================== RENEW KEY (10$) ===================== */
-renewBtn.onclick = async () => {
-  if (renewBtn.classList.contains("disabled")) return;
-
-  if ((userData.balances?.dekta || 0) < 10) {
-    alert("Not enough balance to renew");
-    return;
-  }
-
-  const expires = Timestamp.fromMillis(
-    Date.now() + 30 * 24 * 60 * 60 * 1000
-  );
-
-  await updateDoc(userRef, {
-    "balances.dekta": increment(-10),
-    "box.status": "active",
-    "box.expiresAt": expires
-  });
-
-  // referral reward on renew
-  if (userData.referral?.by) {
-    const refRef = doc(db, "users", userData.referral.by);
-    const refSnap = await getDoc(refRef);
-    if (refSnap.exists()) {
-      await updateDoc(refRef, {
-        "balances.dekta": increment(4),
-        "referral
+});
