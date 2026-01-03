@@ -1,10 +1,12 @@
 import { auth, db } from "./firebase.js";
-import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-document.getElementById("registerBtn").onclick = async () => {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+document.getElementById("registerForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = emailInput.value;
+  const password = passwordInput.value;
 
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
@@ -12,13 +14,14 @@ document.getElementById("registerBtn").onclick = async () => {
     await setDoc(doc(db, "users", cred.user.uid), {
       email,
       dekta: 0,
+      babyDekta: 0,
+      role: "user",
       boxActive: false,
-      createdAt: serverTimestamp(),
-      role: "user"
+      createdAt: serverTimestamp()
     });
 
     window.location.href = "dashboard.html";
-  } catch (e) {
-    alert(e.message);
+  } catch (err) {
+    alert(err.message);
   }
-};
+});
