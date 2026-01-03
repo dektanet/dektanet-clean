@@ -1,194 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>DEKTANET Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>DEKTANET | Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
-    :root{
-      --bg:#0b0f1a;
-      --card:#111827;
-      --purple:#7c3aed;
-      --purple-neon:#a855f7;
-      --yellow:#facc15;
-      --green:#22c55e;
-      --blue:#3b82f6;
-      --red:#dc2626;
-      --text:#ffffff;
+    :root {
+      --bg: #0b0f1a;
+      --card: #12172a;
+      --purple: #8b5cf6;
+      --purple-neon: #a78bfa;
+      --yellow: #facc15;
+      --green: #22c55e;
+      --red: #ef4444;
+      --blue: #3b82f6;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
     }
 
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-    body{background:var(--bg);color:var(--text)}
-
-    /* ================= TOP BAR ================= */
-    .topbar{
-      position:fixed;
-      top:0;left:0;right:0;
-      height:70px;
-      background:#020617;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:0 16px;
-      border-bottom:1px solid #1f2937;
-      z-index:100;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
-    .logo{
-      font-weight:bold;
-      color:var(--purple-neon);
-      font-size:18px;
+    body {
+      background: var(--bg);
+      color: var(--text);
     }
 
-    .balances{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      font-size:13px;
+    /* ===== TOP BAR ===== */
+    .topbar {
+      background: linear-gradient(90deg, #1e1b4b, #312e81);
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
-    .balance-box{
-      background:var(--card);
-      padding:6px 10px;
-      border-radius:10px;
-      border:1px solid var(--purple);
+    .brand {
+      font-weight: bold;
+      font-size: 18px;
+      color: var(--yellow);
     }
 
-    .balance-box span{color:var(--yellow)}
-
-    .actions{
-      display:flex;
-      gap:8px;
+    .balances {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
-    .btn{
-      padding:6px 10px;
-      border-radius:8px;
-      font-size:12px;
-      font-weight:bold;
-      cursor:pointer;
-      border:none;
+    .balance-box {
+      background: #1f2937;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 13px;
     }
 
-    .btn-blue{background:var(--blue)}
-    .btn-green{background:var(--green);color:#000}
-    .btn-red{background:var(--red)}
-    .btn-yellow{background:var(--yellow);color:#000}
-
-    /* ================= NAV ================= */
-    .nav{
-      margin-top:80px;
-      display:flex;
-      gap:10px;
-      padding:0 16px;
-      flex-wrap:wrap;
+    .balance-box span {
+      color: var(--purple-neon);
+      font-weight: bold;
     }
 
-    .nav a{
-      background:var(--card);
-      padding:10px 14px;
-      border-radius:12px;
-      text-decoration:none;
-      color:#fff;
-      border:1px solid var(--purple);
-      font-size:13px;
+    /* ===== NAV ===== */
+    .nav {
+      display: flex;
+      justify-content: space-around;
+      background: #020617;
+      padding: 10px 0;
+      border-top: 1px solid #1f2937;
+      border-bottom: 1px solid #1f2937;
+      font-size: 13px;
     }
 
-    /* ================= MAIN ================= */
-    .container{
-      padding:16px;
-      max-width:1100px;
-      margin:auto;
+    .nav a {
+      color: var(--purple-neon);
+      text-decoration: none;
+      font-weight: bold;
     }
 
-    h2{
-      margin:20px 0 10px;
-      color:var(--purple-neon);
+    /* ===== CONTAINER ===== */
+    .container {
+      padding: 16px;
+      max-width: 1100px;
+      margin: auto;
     }
 
-    /* ================= BOXES ================= */
-    .boxes{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:14px;
+    h2 {
+      margin-bottom: 12px;
+      color: var(--yellow);
     }
 
-    .box{
-      background:linear-gradient(135deg,#111827,#020617);
-      border-radius:18px;
-      padding:16px;
-      border:1px solid var(--purple);
-      box-shadow:0 0 15px rgba(168,85,247,.2);
-      position:relative;
+    /* ===== BOX GRID ===== */
+    .box-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
     }
 
-    .box h3{
-      color:var(--yellow);
-      margin-bottom:6px;
+    .box {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 0 15px rgba(139,92,246,0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    .status{
-      font-size:12px;
-      margin-bottom:10px;
+    .box-title {
+      font-weight: bold;
+      color: var(--purple-neon);
+      font-size: 16px;
     }
 
-    .status.active{color:var(--green)}
-    .status.inactive{color:var(--red)}
-
-    .countdown{
-      font-size:14px;
-      margin-bottom:12px;
+    .box-status {
+      font-size: 13px;
+      color: var(--muted);
     }
 
-    .box-actions{
-      display:flex;
-      gap:8px;
+    .countdown {
+      font-size: 14px;
+      color: var(--yellow);
     }
 
-    .circle-btn{
-      width:48px;
-      height:48px;
-      border-radius:50%;
-      background:var(--purple);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:bold;
-      font-size:14px;
-      cursor:pointer;
+    .ref-info {
+      font-size: 13px;
+      color: var(--muted);
     }
 
-    .circle-btn:hover{
-      background:var(--purple-neon);
+    .box button {
+      margin-top: auto;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
     }
 
-    .share{
-      margin-top:10px;
-      font-size:12px;
-      color:#ccc;
+    .btn-activate {
+      background: var(--blue);
+      color: white;
     }
 
-    /* ================= FOOT SPACE ================= */
-    .spacer{height:40px}
+    .btn-reactivate {
+      background: var(--purple);
+      color: white;
+    }
+
+    .btn-disabled {
+      background: #374151;
+      color: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    /* ===== FOOTER ACTIONS ===== */
+    .footer-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .action {
+      background: #020617;
+      border: 1px solid #1f2937;
+      padding: 14px;
+      border-radius: 14px;
+      text-align: center;
+      font-weight: bold;
+      color: var(--purple-neon);
+    }
   </style>
 </head>
+
 <body>
 
   <!-- TOP BAR -->
   <div class="topbar">
-    <div class="logo">🚀 DEKTANET</div>
-
+    <div class="brand">🚀 DEKTANET</div>
     <div class="balances">
       <div class="balance-box">DEKTA: <span>$120</span></div>
-      <div class="balance-box">BABYDEKTA: <span>$24</span></div>
-      <div class="balance-box">DEKTABOX EARN$: <span>$300</span></div>
-    </div>
-
-    <div class="actions">
-      <button class="btn btn-blue">Deposit</button>
-      <button class="btn btn-green">Withdraw</button>
-      <button class="btn btn-red">Logout</button>
+      <div class="balance-box">BABYDEKTA: <span>$6.40</span></div>
+      <div class="balance-box">DEKTABOX EARN$: <span>$340</span></div>
     </div>
   </div>
 
@@ -200,65 +197,53 @@
     <a href="#">Games</a>
     <a href="#">Referral</a>
     <a href="#">Chat</a>
+    <a href="#">Logout</a>
   </div>
 
-  <!-- MAIN -->
+  <!-- CONTENT -->
   <div class="container">
 
-    <h2>🎁 DEKTA-BOX (Main Feature)</h2>
+    <h2>📦 DEKTA-BOX</h2>
 
-    <div class="boxes">
+    <div class="box-grid">
 
       <!-- BOX 1 -->
       <div class="box">
-        <h3>BOX 1</h3>
-        <div class="status active">Status: ACTIVE</div>
-        <div class="countdown">⏳ 18 days left</div>
-
-        <div class="box-actions">
-          <div class="circle-btn">$30</div>
-          <button class="btn btn-yellow">Reactivate $10</button>
-        </div>
-
-        <div class="share">
-          Share to win <b>$14</b><br>
-          ID: <b>1293456</b>
-        </div>
+        <div class="box-title">DEKTA-BOX A</div>
+        <div class="box-status">Status: ❌ INACTIVE</div>
+        <div class="countdown">⏳ 30 days (after activation)</div>
+        <div class="ref-info">Referral win: $14 / Reactivate: $4</div>
+        <button class="btn-activate">🔑 Activate Key – $30</button>
       </div>
 
       <!-- BOX 2 -->
       <div class="box">
-        <h3>BOX 2</h3>
-        <div class="status inactive">Status: INACTIVE</div>
-        <div class="countdown">⛔ Locked</div>
-
-        <div class="box-actions">
-          <div class="circle-btn">$50</div>
-        </div>
-
-        <div class="share">
-          Buy key to activate
-        </div>
+        <div class="box-title">DEKTA-BOX B</div>
+        <div class="box-status">Status: ✅ ACTIVE</div>
+        <div class="countdown">⏳ 12 days left</div>
+        <div class="ref-info">Active referrals: 3</div>
+        <button class="btn-reactivate">♻️ Reactivate Key – $10</button>
       </div>
 
       <!-- BOX 3 -->
       <div class="box">
-        <h3>BOX 3</h3>
-        <div class="status inactive">Status: INACTIVE</div>
-        <div class="countdown">⛔ Locked</div>
-
-        <div class="box-actions">
-          <div class="circle-btn">$100</div>
-        </div>
-
-        <div class="share">
-          High reward box
-        </div>
+        <div class="box-title">DEKTA-BOX C</div>
+        <div class="box-status">Status: 🔒 CLOSED</div>
+        <div class="countdown">Needs key to open</div>
+        <div class="ref-info">Higher rewards</div>
+        <button class="btn-disabled">Locked</button>
       </div>
 
     </div>
 
-    <div class="spacer"></div>
+    <!-- QUICK ACTIONS -->
+    <div class="footer-actions">
+      <div class="action">💰 Deposit</div>
+      <div class="action">💸 Withdraw</div>
+      <div class="action">🧩 Earn with Tasks</div>
+      <div class="action">🎮 Play to Win</div>
+    </div>
+
   </div>
 
 </body>
