@@ -1,13 +1,12 @@
 import { auth, db } from "./firebase.js";
-import {
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-import {
-  doc,
-  getDoc
-} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+const emailEl = document.getElementById("user-email");
+const dektaEl = document.getElementById("dekta");
+const babyDektaEl = document.getElementById("babyDekta");
+const roleEl = document.getElementById("role");
+const logoutBtn = document.getElementById("logout");
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
@@ -15,23 +14,20 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  document.getElementById("userEmail").innerText =
-    "Welcome: " + user.email;
+  emailEl.innerText = user.email;
 
-  const refLink = `${location.origin}/register.html?ref=${user.uid}`;
-  document.getElementById("refLink").value = refLink;
-
-  const userRef = doc(db, "users", user.uid);
-  const snap = await getDoc(userRef);
+  const ref = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
 
   if (snap.exists()) {
     const data = snap.data();
-    document.getElementById("dekta").innerText = data.dekta || 0;
-    document.getElementById("baby").innerText = data.baby || 0;
+    dektaEl.innerText = data.dekta ?? 0;
+    babyDektaEl.innerText = data.babyDekta ?? 0;
+    roleEl.innerText = data.role ?? "user";
   }
 });
 
-window.logout = async function () {
+logoutBtn.addEventListener("click", async () => {
   await signOut(auth);
   window.location.href = "login.html";
-};
+});
