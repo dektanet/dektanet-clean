@@ -2,28 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>DEKTANET Dashboard</title>
+  <title>Dashboard</title>
 </head>
 <body>
 
   <h1>Dashboard</h1>
 
-  <p id="userEmail">Loading...</p>
+  <p>Email: <span id="user-email"></span></p>
+  <p>DEKTA: <span id="dekta"></span></p>
+  <p>BABYDEKTA: <span id="babyDekta"></span></p>
+  <p>Role: <span id="role"></span></p>
 
-  <hr>
-
-  <h3>Balances</h3>
-  <p>DEKTA: <span id="dekta">0</span></p>
-  <p>BABYDEKTA: <span id="baby">0</span></p>
-
-  <hr>
-
-  <h3>Referral</h3>
-  <input id="refLink" readonly style="width:100%" />
-
-  <hr>
-
-  <button onclick="logout()">Logout</button>
+  <button id="logout">Logout</button>
 
   <script type="module" src="js/dashboard.js"></script>
 </body>
