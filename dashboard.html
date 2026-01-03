@@ -1,223 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>DEKTANET Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<title>DEKTANET Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    :root {
-      --bg: #0b0f1a;
-      --card: #111827;
-      --purple: #7c3aed;
-      --neon: #a855f7;
-      --green: #22c55e;
-      --red: #ef4444;
-      --blue: #3b82f6;
-      --yellow: #facc15;
-      --text: #ffffff;
-    }
+<style>
+:root{
+  --bg:#0b0f1a;
+  --card:#111827;
+  --purple:#7c3aed;
+  --purple-neon:#a855f7;
+  --yellow:#facc15;
+  --green:#22c55e;
+  --blue:#3b82f6;
+  --red:#ef4444;
+  --text:#e5e7eb;
+}
 
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial, sans-serif;
+}
 
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-    }
+body{
+  background:var(--bg);
+  color:var(--text);
+}
 
-    /* TOP BAR */
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 20px;
-      background: linear-gradient(90deg, #0f172a, #020617);
-      border-bottom: 1px solid #1f2937;
-    }
+/* ===== TOP BAR ===== */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 20px;
+  background:#020617;
+  border-bottom:1px solid #1f2937;
+}
 
-    .logo {
-      font-weight: bold;
-      font-size: 18px;
-      color: var(--neon);
-    }
+.logo{
+  font-weight:bold;
+  color:var(--purple-neon);
+  font-size:18px;
+}
 
-    .balances {
-      display: flex;
-      gap: 12px;
-    }
+.top-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
 
-    .balance {
-      background: var(--card);
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-size: 13px;
-      text-align: center;
-    }
+.badge{
+  background:var(--purple);
+  padding:8px 12px;
+  border-radius:10px;
+  font-size:13px;
+}
 
-    .balance span {
-      display: block;
-      margin-top: 4px;
-      font-weight: bold;
-      color: var(--yellow);
-    }
+.btn{
+  padding:8px 14px;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+  border:none;
+}
 
-    /* NAV */
-    .nav {
-      display: flex;
-      justify-content: space-around;
-      padding: 12px;
-      background: #020617;
-      border-bottom: 1px solid #1f2937;
-    }
+.deposit{background:var(--blue);}
+.withdraw{background:var(--green); color:#000;}
+.logout{background:var(--red);}
 
-    .nav button {
-      background: none;
-      border: none;
-      color: var(--neon);
-      font-weight: bold;
-      cursor: pointer;
-    }
+/* ===== NAV BAR ===== */
+.navbar{
+  display:flex;
+  justify-content:space-around;
+  padding:12px;
+  background:#020617;
+  border-bottom:1px solid #1f2937;
+}
 
-    /* CONTENT */
-    .container {
-      padding: 20px;
-      max-width: 1100px;
-      margin: auto;
-    }
+.navbar a{
+  text-decoration:none;
+  color:var(--purple-neon);
+  font-weight:bold;
+  font-size:13px;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-    }
+/* ===== CONTAINER ===== */
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+}
 
-    .card {
-      background: var(--card);
-      border-radius: 16px;
-      padding: 18px;
-      border: 1px solid #1f2937;
-    }
+/* ===== BALANCE CARDS ===== */
+.balances{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+  margin-bottom:24px;
+}
 
-    .card h3 {
-      margin-top: 0;
-      color: var(--neon);
-    }
+.balance-card{
+  background:var(--card);
+  border-radius:16px;
+  padding:16px;
+  box-shadow:0 0 20px rgba(124,58,237,.15);
+}
 
-    .btn {
-      margin-top: 12px;
-      padding: 10px;
-      width: 100%;
-      border-radius: 10px;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.balance-card h4{
+  color:#9ca3af;
+  font-size:13px;
+  margin-bottom:6px;
+}
 
-    .btn-blue { background: var(--blue); }
-    .btn-green { background: var(--green); color:#000; }
-    .btn-red { background: var(--red); }
-    .btn-yellow { background: var(--yellow); color:#000; }
+.balance-card .amount{
+  font-size:22px;
+  font-weight:bold;
+}
 
-    /* BOX */
-    .box {
-      text-align: center;
-      border: 2px dashed var(--purple);
-    }
+/* ===== MAIN GRID ===== */
+.grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:20px;
+}
 
-    .box-status {
-      margin-top: 10px;
-      color: var(--red);
-      font-weight: bold;
-    }
+@media(max-width:900px){
+  .grid{grid-template-columns:1fr;}
+}
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: #9ca3af;
-      font-size: 12px;
-    }
-  </style>
+/* ===== BOX ===== */
+.box{
+  background:linear-gradient(135deg,#020617,#111827);
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 0 30px rgba(168,85,247,.2);
+}
+
+.box h3{
+  color:var(--yellow);
+  margin-bottom:10px;
+}
+
+.box-status{
+  margin-bottom:12px;
+  color:#f87171;
+}
+
+.box button{
+  background:var(--purple-neon);
+  color:#000;
+  width:100%;
+  padding:12px;
+  border-radius:14px;
+  font-weight:bold;
+  border:none;
+  cursor:pointer;
+}
+
+/* ===== ACTION CARDS ===== */
+.card{
+  background:var(--card);
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:16px;
+}
+
+.card h3{
+  margin-bottom:10px;
+}
+
+.action{
+  background:var(--yellow);
+  color:#000;
+  padding:12px;
+  border-radius:12px;
+  text-align:center;
+  font-weight:bold;
+  margin-top:10px;
+  cursor:pointer;
+}
+</style>
 </head>
 
 <body>
 
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div class="logo">DEKTANET</div>
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">🚀 DEKTANET</div>
+  <div class="top-actions">
+    <div class="badge">DEKTABOX $ <b>30</b></div>
+    <div class="badge">DEKTA $ <b>0.00</b></div>
+    <div class="badge">BABYDEKTA $ <b>0.00</b></div>
+    <button class="btn deposit">Deposit</button>
+    <button class="btn withdraw">Withdraw</button>
+    <button class="btn logout">Logout</button>
+  </div>
+</div>
 
-    <div class="balances">
-      <div class="balance">
-        DEKTA $
-        <span>120.00</span>
-      </div>
-      <div class="balance">
-        BABYDEKTA $
-        <span>8.40</span>
-      </div>
-      <div class="balance">
-        DEKTABOX $
-        <span>60.00</span>
-      </div>
+<!-- NAV BAR -->
+<div class="navbar">
+  <a href="#">Dashboard</a>
+  <a href="#">Box</a>
+  <a href="#">Tasks</a>
+  <a href="#">Games</a>
+  <a href="#">Referral</a>
+  <a href="#">Chat</a>
+</div>
+
+<div class="container">
+
+  <!-- BALANCES -->
+  <div class="balances">
+    <div class="balance-card">
+      <h4>Total Earn</h4>
+      <div class="amount">$0.00</div>
+    </div>
+    <div class="balance-card">
+      <h4>Withdraw Available</h4>
+      <div class="amount">$0.00</div>
+    </div>
+    <div class="balance-card">
+      <h4>Referral Earnings</h4>
+      <div class="amount">$0.00</div>
     </div>
   </div>
 
-  <!-- NAV -->
-  <div class="nav">
-    <button>Dashboard</button>
-    <button>Box</button>
-    <button>Tasks</button>
-    <button>Games</button>
-    <button>Referral</button>
-    <button>Chat</button>
-    <button style="color:red">Logout</button>
-  </div>
+  <div class="grid">
 
-  <!-- CONTENT -->
-  <div class="container">
+    <!-- BOX -->
+    <div class="box">
+      <h3>DEKTA-BOX</h3>
+      <div class="box-status">Status: INACTIVE</div>
+      <p>Activate Box to win <b>$14</b> per referral</p>
+      <p style="margin:10px 0;color:#9ca3af">
+        Countdown • Referral stats • Reactivation required
+      </p>
+      <button>🔑 Buy Key – 30$</button>
+    </div>
 
-    <div class="grid">
-
-      <!-- BOX -->
-      <div class="card box">
-        <h3>DEKTA-BOX</h3>
-        <p>Share to win <b>$14</b></p>
-        <div class="box-status">INACTIVE</div>
-        <button class="btn btn-yellow">Activate Key $30</button>
-      </div>
-
-      <!-- TASKS -->
+    <!-- RIGHT SIDE -->
+    <div>
       <div class="card">
         <h3>Earn with Tasks</h3>
-        <p>Complete tasks & earn</p>
-        <p><b>0.02 BABYDEKTA</b> per task</p>
-        <button class="btn btn-green">View Tasks</button>
+        <p>Get <b>0.02</b> per task</p>
+        <div class="action">View Tasks</div>
       </div>
 
-      <!-- CREATE TASK -->
-      <div class="card">
-        <h3>Create Task</h3>
-        <p>Promote links & content</p>
-        <button class="btn btn-blue">Create</button>
-      </div>
-
-      <!-- GAMES -->
       <div class="card">
         <h3>Skill Games</h3>
-        <p>Play & win DEKTA</p>
-        <button class="btn btn-purple">Play Now</button>
+        <p>Play & Win DEKTA</p>
+        <div class="action">Play Now</div>
       </div>
 
+      <div class="card">
+        <h3>Referral</h3>
+        <p>Share your link & earn</p>
+        <div class="action">Copy Referral Link</div>
+      </div>
     </div>
 
   </div>
-
-  <footer>
-    © 2026 DEKTANET – Clean UI Version
-  </footer>
+</div>
 
 </body>
 </html>
