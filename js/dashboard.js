@@ -1,35 +1,23 @@
 import { auth, db } from "./firebase.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const welcome = document.getElementById("welcome");
-const dektaEl = document.getElementById("dekta");
-const babyDektaEl = document.getElementById("babyDekta");
-const boxStatusEl = document.getElementById("boxStatus");
-const logoutBtn = document.getElementById("logout");
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    window.location.href = "login.html";
+    location.href = "login.html";
     return;
   }
 
-  welcome.textContent = `Welcome ${user.email}`;
+  const snap = await getDoc(doc(db, "users", user.uid));
+  const data = snap.data();
 
-  const ref = doc(db, "users", user.uid);
-  const snap = await getDoc(ref);
-
-  if (snap.exists()) {
-    const data = snap.data();
-
-    dektaEl.textContent = data.dekta ?? 0;
-    babyDektaEl.textContent = data.babyDekta ?? 0;
-
-    boxStatusEl.textContent = data.boxActive ? "Active" : "Inactive";
-  }
+  document.getElementById("user-email").innerText = user.email;
+  document.getElementById("dekta").innerText = data.dekta;
+  document.getElementById("babyDekta").innerText = data.babyDekta;
+  document.getElementById("role").innerText = data.role;
 });
 
-logoutBtn.onclick = async () => {
+logout.addEventListener("click", async () => {
   await signOut(auth);
-  window.location.href = "login.html";
-};
+  location.href = "login.html";
+});
