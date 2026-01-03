@@ -1,30 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard</title>
+  <meta charset="UTF-8" />
+  <title>DEKTANET Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --card: #111827;
+      --purple: #7c3aed;
+      --neon: #a855f7;
+      --green: #22c55e;
+      --red: #ef4444;
+      --blue: #3b82f6;
+      --yellow: #facc15;
+      --text: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* TOP BAR */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: linear-gradient(90deg, #0f172a, #020617);
+      border-bottom: 1px solid #1f2937;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 18px;
+      color: var(--neon);
+    }
+
+    .balances {
+      display: flex;
+      gap: 12px;
+    }
+
+    .balance {
+      background: var(--card);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .balance span {
+      display: block;
+      margin-top: 4px;
+      font-weight: bold;
+      color: var(--yellow);
+    }
+
+    /* NAV */
+    .nav {
+      display: flex;
+      justify-content: space-around;
+      padding: 12px;
+      background: #020617;
+      border-bottom: 1px solid #1f2937;
+    }
+
+    .nav button {
+      background: none;
+      border: none;
+      color: var(--neon);
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* CONTENT */
+    .container {
+      padding: 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 18px;
+      border: 1px solid #1f2937;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: var(--neon);
+    }
+
+    .btn {
+      margin-top: 12px;
+      padding: 10px;
+      width: 100%;
+      border-radius: 10px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-blue { background: var(--blue); }
+    .btn-green { background: var(--green); color:#000; }
+    .btn-red { background: var(--red); }
+    .btn-yellow { background: var(--yellow); color:#000; }
+
+    /* BOX */
+    .box {
+      text-align: center;
+      border: 2px dashed var(--purple);
+    }
+
+    .box-status {
+      margin-top: 10px;
+      color: var(--red);
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #9ca3af;
+      font-size: 12px;
+    }
+  </style>
 </head>
+
 <body>
 
-<h2>Dashboard</h2>
-<p id="userEmail"></p>
-<button id="logoutBtn">Logout</button>
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="logo">DEKTANET</div>
 
-<script type="module">
-  import { onAuthStateChanged, signOut } from
-  "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+    <div class="balances">
+      <div class="balance">
+        DEKTA $
+        <span>120.00</span>
+      </div>
+      <div class="balance">
+        BABYDEKTA $
+        <span>8.40</span>
+      </div>
+      <div class="balance">
+        DEKTABOX $
+        <span>60.00</span>
+      </div>
+    </div>
+  </div>
 
-  onAuthStateChanged(auth, (user) => {
-    if (!user) location.href = "login.html";
-    else document.getElementById("userEmail").innerText = user.email;
-  });
+  <!-- NAV -->
+  <div class="nav">
+    <button>Dashboard</button>
+    <button>Box</button>
+    <button>Tasks</button>
+    <button>Games</button>
+    <button>Referral</button>
+    <button>Chat</button>
+    <button style="color:red">Logout</button>
+  </div>
 
-  logoutBtn.onclick = async () => {
-    await signOut(auth);
-    location.href = "login.html";
-  };
-</script>
+  <!-- CONTENT -->
+  <div class="container">
 
-<script src="js/firebase.js" type="module"></script>
+    <div class="grid">
+
+      <!-- BOX -->
+      <div class="card box">
+        <h3>DEKTA-BOX</h3>
+        <p>Share to win <b>$14</b></p>
+        <div class="box-status">INACTIVE</div>
+        <button class="btn btn-yellow">Activate Key $30</button>
+      </div>
+
+      <!-- TASKS -->
+      <div class="card">
+        <h3>Earn with Tasks</h3>
+        <p>Complete tasks & earn</p>
+        <p><b>0.02 BABYDEKTA</b> per task</p>
+        <button class="btn btn-green">View Tasks</button>
+      </div>
+
+      <!-- CREATE TASK -->
+      <div class="card">
+        <h3>Create Task</h3>
+        <p>Promote links & content</p>
+        <button class="btn btn-blue">Create</button>
+      </div>
+
+      <!-- GAMES -->
+      <div class="card">
+        <h3>Skill Games</h3>
+        <p>Play & win DEKTA</p>
+        <button class="btn btn-purple">Play Now</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer>
+    © 2026 DEKTANET – Clean UI Version
+  </footer>
+
 </body>
 </html>
