@@ -1,19 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard</title>
+  <meta charset="UTF-8" />
+  <title>DEKTANET Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-  <h1>Dashboard</h1>
+  <nav class="topbar">
+    <h2>DEKTANET</h2>
+    <button id="logout">Logout</button>
+  </nav>
 
-  <p>Email: <span id="user-email"></span></p>
-  <p>DEKTA: <span id="dekta"></span></p>
-  <p>BABYDEKTA: <span id="babyDekta"></span></p>
-  <p>Role: <span id="role"></span></p>
+  <main class="container">
 
-  <button id="logout">Logout</button>
+    <h3 id="welcome">Welcome</h3>
+
+    <div class="cards">
+      <div class="card">
+        <h4>DEKTA</h4>
+        <p id="dekta">0</p>
+      </div>
+
+      <div class="card">
+        <h4>BABYDEKTA</h4>
+        <p id="babyDekta">0</p>
+      </div>
+
+      <div class="card">
+        <h4>DEKTA BOX</h4>
+        <p id="boxStatus">Inactive</p>
+      </div>
+    </div>
+
+    <section class="actions">
+      <a href="tasks.html" class="btn">Earn with Tasks</a>
+      <a href="box.html" class="btn">DEKTA Box</a>
+      <a href="games.html" class="btn">Play & Win</a>
+      <a href="withdraw.html" class="btn danger">Withdraw</a>
+    </section>
+
+  </main>
 
   <script type="module" src="js/dashboard.js"></script>
 </body>
