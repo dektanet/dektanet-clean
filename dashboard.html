@@ -2,40 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard | DEKTANET</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEKTANET Dashboard</title>
 </head>
 <body>
 
-<h2>Dashboard</h2>
-<p id="userEmail">Loading...</p>
+  <h1>Dashboard</h1>
 
-<button id="logoutBtn">Logout</button>
+  <p id="userEmail">Loading...</p>
 
-<script type="module">
-  import { auth, db } from "./js/firebase.js";
-  import { onAuthStateChanged, signOut } 
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { doc, getDoc } 
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  <hr>
 
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      window.location.href = "login.html";
-      return;
-    }
+  <h3>Balances</h3>
+  <p>DEKTA: <span id="dekta">0</span></p>
+  <p>BABYDEKTA: <span id="baby">0</span></p>
 
-    document.getElementById("userEmail").innerText = "Welcome: " + user.email;
+  <hr>
 
-    const snap = await getDoc(doc(db, "users", user.uid));
-    console.log("USER DATA:", snap.data());
-  });
+  <h3>Referral</h3>
+  <input id="refLink" readonly style="width:100%" />
 
-  document.getElementById("logoutBtn").onclick = async () => {
-    await signOut(auth);
-    window.location.href = "login.html";
-  };
-</script>
+  <hr>
 
+  <button onclick="logout()">Logout</button>
+
+  <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
